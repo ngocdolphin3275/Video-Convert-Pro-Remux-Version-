@@ -1,20 +1,15 @@
-<!--
-Video Convert Pro project overview and Windows release guide.
--->
-
 <h1 align="center">Video Convert Pro</h1>
 <p align="center"><strong>Smart remuxing. Controlled conversion. Source-matched quality.</strong></p>
 <p align="center">
-  A Windows desktop video utility built around container-aware stream handling and practical batch processing.
+  A Windows desktop video utility built around container-aware stream handling,
+  practical batch processing and NVIDIA GPU acceleration.
 </p>
 <p align="center">
   <a href="https://ngocdolphincom.wordpress.com/video-convert-pro/">Project website (English)</a>
   ·
   <a href="https://ngocdolphincom.wordpress.com/vi/video-convert-pro/">Trang dự án (Tiếng Việt)</a>
   ·
-  <a href="https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-">GitHub repository</a>
-  ·
-  <a href="https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases">All releases</a>
+  <a href="https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases">GitHub releases</a>
 </p>
 
 ---
@@ -23,68 +18,54 @@ Video Convert Pro project overview and Windows release guide.
 
 Video Convert Pro is a Windows desktop utility for remuxing and converting video files while keeping control over how individual media streams are handled.
 
-Rather than re-encoding every stream by default, the application checks whether the selected target container can accept the existing video, audio and subtitle streams. Compatible streams can be copied; conversion is reserved for streams that need it.
+The processing engine follows a simple priority: **Copy → Convert → Drop**. It checks which streams the destination container supports, copies compatible streams whenever possible, and only re-encodes streams that need a different format.
 
-The project belongs to **MasterTools**, NgocDolphin's utility project family. It is separate from the proprietary PyProjects applications.
-
-## Processing philosophy
-
-**COPY → CONVERT → DROP**
-
-1. **Check the destination container.** The selected container determines which stream codecs can be retained.
-2. **Copy compatible streams first.** Avoid re-encoding when the original stream is already suitable for the destination.
-3. **Convert only when needed.** Incompatible streams can be re-encoded using the selected options.
-4. **Drop only what is unnecessary or unsupported.** The processing plan handles secondary or incompatible streams without arbitrarily discarding primary video or audio.
-5. **Use a fault-tolerant fallback.** When FFmpeg cannot complete a planned operation, the engine can move through a copy, convert and drop fallback sequence where appropriate.
-
-When video re-encoding is required, the engine is designed to preserve source resolution and timing where possible, avoid upscaling, and retain pixel format, bit depth and colour/HDR metadata when supported by the selected encoder.
+Video Convert Pro is part of **MasterTools**, NgocDolphin's open-source utility project family. It is separate from the proprietary PyProjects applications.
 
 ## Features
 
 - **Container selection** — MP4, MKV, WebM, MOV, AVI and TS.
 - **Independent video and audio modes** — automatic handling (Copy > Convert), force re-encode, or force copy.
-- **Video codec controls** — H.264, H.265/HEVC, VP9 and AV1, filtered by the selected container.
-- **Quality controls** — CRF selection, encoder presets and adaptive CRF options for re-encoding.
-- **GPU acceleration** — NVIDIA NVENC is available in the Vietnamese 3.9.5 build. The English 3.9 build does not currently include NVENC.
+- **Container-aware codecs** — H.264, H.265/HEVC, VP9 and AV1 choices are filtered to match the selected container.
+- **Quality controls** — CRF, encoder presets, adaptive CRF and optional bitrate cap.
+- **NVIDIA GPU acceleration** — NVENC for supported codecs, with a runtime capability check and automatic CPU fallback when a compatible GPU/driver is unavailable.
 - **Stream and metadata options** — retain metadata, chapters, cover attachments and supported data streams.
-- **Batch queue** — add individual files or scan folders, enable or disable queued tasks, clear completed work, and cancel processing.
-- **Progress and diagnostics** — per-file status, progress reporting, an overall progress indicator and a processing log.
-- **Output verification** — completed output is probed again to check for expected video/audio streams and duration relative to the source.
-- **Drag and drop** — included in the portable packages through the optional desktop integration.
+- **Batch processing** — add individual files, scan folders, enable or disable queued tasks, and cancel processing.
+- **Progress and diagnostics** — per-file status and progress, overall progress, processing log and a completion summary.
+- **Convenient file actions** — right-click a queued item to enable/disable it, open the source or containing folder, or remove it.
+- **Output-folder controls** — choose or edit the output path and open it in File Explorer.
+- **Drag and drop / command line** — desktop drag-and-drop and opening files or folders with the executable are supported.
+- **Output verification** — FFprobe checks resulting streams and duration against the source before a task is treated as complete.
 
 ## Supported formats
 
-### Output containers
+**Output containers:** MP4, MKV, WebM, MOV, AVI and TS.
 
-MP4, MKV, WebM, MOV, AVI and TS.
-
-### Source file extensions
-
-MP4, M4V, MKV, MOV, AVI, TS, M2TS, MTS, WebM, FLV, WMV, MPEG, MPG, VOB, OGV, 3GP, 3G2, MXF, F4V, RM, RMVB, ASF, DIVX, M2V and MP2V.
+**Source extensions:** MP4, M4V, MKV, MOV, AVI, TS, M2TS, MTS, WebM, FLV, WMV, MPEG, MPG, VOB, OGV, 3GP, 3G2, MXF, F4V, RM, RMVB, ASF, DIVX, M2V and MP2V.
 
 Actual stream compatibility depends on the codecs present in each input file and the selected destination container.
 
 ## Screenshots
 
-Application screenshots will be added here as the release gallery is prepared.
+Application screenshots will be added here.
 
 ## Download and run
 
 <details>
-<summary><strong>Windows x64 — English (Video Convert Pro 3.9)</strong></summary>
+<summary><strong>Windows x64 — English (Video Convert Pro 3.9.5)</strong></summary>
 
-[**Download English build**](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/download/windows-builds-2026-11-22/Video-Convert-Pro-Windows-x64-EN-v3.9.zip)
+[**Download English portable build**](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/download/v3.9.5/Video-Convert-Pro-Windows-x64-EN-v3.9.5.zip)
 
-File: `Video-Convert-Pro-Windows-x64-EN-v3.9.zip`
+File: Video-Convert-Pro-Windows-x64-EN-v3.9.5.zip
 
 </details>
 
 <details>
 <summary><strong>Windows x64 — Tiếng Việt (Video Convert Pro 3.9.5)</strong></summary>
 
-[**Tải bản tiếng Việt**](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/download/windows-builds-2026-11-22/Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip)
+[**Tải bản portable tiếng Việt**](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/download/v3.9.5/Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip)
 
-File: `Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip`
+File: Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip
 
 </details>
 
@@ -92,35 +73,33 @@ File: `Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip`
 
 1. Download the ZIP matching your preferred language.
 2. Extract the complete folder to a normal writable location.
-3. Run **Setup-FFmpeg.bat** once. It downloads FFmpeg and FFprobe from Gyan.dev and places them beside the application executable.
-4. Run **VideoConvertPro.exe**.
+3. Run **VideoConvertPro.exe**.
 
-A separate Python installation is not required. Keep the extracted folder structure intact; do not move the executable away from its `_internal` folder.
+The package includes the Python runtime, application libraries, FFmpeg, FFprobe and the DLLs required by FFmpeg. No separate Python installation, runtime installer, FFmpeg download or setup script is required. Keep the extracted folder structure intact.
 
-### Version note
-
-The two language packages are built from the existing language-specific source versions and are not yet feature-identical. English is version **3.9**; Vietnamese is version **3.9.5**. The Vietnamese build includes NVIDIA NVENC support, which is not present in the current English 3.9 source.
-
-### FFmpeg dependency
-
-FFmpeg and FFprobe are **not bundled** in the application ZIPs. The setup helper downloads the Windows Essentials static build directly from Gyan.dev. Gyan's static FFmpeg builds are GPLv3; review the build details and licensing at [Gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
-
-The ZIPs include third-party notices and runtime license texts. See `THIRD_PARTY_NOTICES.txt` and the `Licenses/` folder after extraction.
+SHA-256 checksums are included in SHA256SUMS.txt in the release assets.
 
 ## Platform
 
 - Windows 10/11, 64-bit (x64).
 - Portable onedir distribution.
-- FFmpeg and FFprobe are installed separately by the setup helper.
-- No macOS or Linux build is currently documented.
+- No installer required.
+- No macOS or Linux build is currently published.
 
-## Licensing and source status
+## Source code and licensing
 
-Video Convert Pro is intended to be an open-source MasterTools project. The application source files and a formal project-level `LICENSE` have **not yet been published** in this repository.
+The Video Convert Pro application source is available in the src/ folder under the **MIT License**. The root LICENSE applies to the application source code only.
 
-Until the project license is added, the repository's public visibility should not be interpreted as permission to reuse, modify or redistribute the application's source code. Source publication and the formal project license are follow-up work.
+The portable packages use FFmpeg and FFprobe from the **BtbN FFmpeg-Builds GPL shared Windows x64 build**, version n9.0.2-61-gd59078794d-20261121. FFmpeg is distributed under **GNU GPL v3**. The application's MIT licence does not relicense FFmpeg or any third-party component.
 
-Third-party components remain subject to their own licenses and notices. Their applicable texts are included in the portable packages.
+To make the FFmpeg build traceable, this repository includes:
+- docs/FFmpeg-BUILD-INFO.txt — exact binary version, configuration and upstream package checksum.
+- docs/FFmpeg-SOURCE-INDEX.md — FFmpeg source commit, BtbN build commit and pinned upstream source references for build dependencies.
+- docs/THIRD_PARTY_NOTICES.md — third-party notices and licence scope.
+- third_party/FFmpeg-Builds/ — the BtbN build recipe snapshot used by the upstream workflow, including dependency scripts and patches.
+- FFmpeg-Build-Recipes-BtbN-7f2a6b1.zip — a source snapshot of those build recipes, also attached to the release.
+
+Each bundled third-party component remains subject to its own licence. Review the source index and the licence files before redistributing modified builds.
 
 ## Project links
 
@@ -128,7 +107,6 @@ Third-party components remain subject to their own licenses and notices. Their a
 - [Video Convert Pro — Vietnamese project page](https://ngocdolphincom.wordpress.com/vi/video-convert-pro/)
 - [Latest Windows release](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/latest)
 - [NgocDolphin — independent software projects](https://ngocdolphincom.wordpress.com/)
-- [MasterTools on GitHub](https://github.com/ngocdolphin3275)
 
 ---
 
