@@ -1,4 +1,7 @@
 <!-- Video Convert Pro project overview -->
+<p align="center">
+  <img src="assets/video-convert-pro-logo.png" alt="Video Convert Pro logo" width="112">
+</p>
 <h1 align="center">Video Convert Pro</h1>
 <p align="center"><strong>Smart remuxing. Controlled conversion.</strong></p>
 <p align="center">
