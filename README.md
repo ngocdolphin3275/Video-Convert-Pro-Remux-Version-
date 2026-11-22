@@ -64,8 +64,8 @@ Compare the downloaded ZIP with the published SHA-256 checksum:
 
 | File | SHA-256 |
 |---|---|
-| Video-Convert-Pro-Windows-x64-EN-v3.9.5.zip | 63F2F5DC0731DE0F931F80EEC99E62F9A257204E8E0FB750D78A5CCA19B911B9 |
-| Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip | E49DD9F05E8823B4EC718FF36386EA7E2DDA670C2C4FA8D01FEBFD108670B191 |
+| Video-Convert-Pro-Windows-x64-EN-v3.9.5.zip | AA565AE961B0196DB8A7254D89E23A3D2C4824105EDCBAB27D6DDFBF49A734E4 |
+| Video-Convert-Pro-Windows-x64-VI-v3.9.5.zip | CB152F788D0E5461C728F21F8744073E05D29CCC7EBB00FB40CC2F571590DD2C |
 
 [Download SHA256SUMS.txt](https://github.com/ngocdolphin3275/Video-Convert-Pro-Remux-Version-/releases/download/v3.9.5/SHA256SUMS.txt)
 
