@@ -3,113 +3,113 @@
 
 """
 ===============================================================================
-ðŸŽ¬ VIDEO CONVERTER PRO v3.9.5
+🎬 VIDEO CONVERTER PRO v3.9.5
 ===============================================================================
 
-Container-First Â· Stream Sanitizer Â· Smart Fallback Â· Source-Matched Quality
+Container-First · Stream Sanitizer · Smart Fallback · Source-Matched Quality
 
-Triáº¿t lÃ½:
+Triết lý:
 
     COPY > CONVERT > DROP
 
-NguyÃªn táº¯c:
+Nguyên tắc:
 
-1. Container Ä‘Ã­ch quyáº¿t Ä‘á»‹nh codec nÃ o Ä‘Æ°á»£c phÃ©p giá»¯.
-2. Stream bÃ¬nh thÆ°á»ng Ä‘Æ°á»£c COPY náº¿u cÃ³ thá»ƒ.
-3. Stream khÃ´ng tÆ°Æ¡ng thÃ­ch má»›i CONVERT (khÃ´ng Ã©p copy codec ngoÃ i allowlist).
-4. Stream rÃ¡c / khÃ´ng cáº§n thiáº¿t má»›i DROP.
-5. Khi FFmpeg tháº¥t báº¡i:
-       COPY (chá»‹u lá»—i tá»‘i Ä‘a) â†’ CONVERT â†’ DROP
-   Video/audio gá»‘c Ä‘Ã£ lá»—i sáºµn â†’ Æ°u tiÃªn copy chá»‹u lá»—i; chá»‰ convert khi
-   cÃ´ng cá»¥ thá»±c sá»± tá»« chá»‘i (muxer refuse). KhÃ´ng tá»± Ã½ DROP video/audio chÃ­nh.
-6. Khi báº¯t buá»™c re-encode video:
-       - Giá»¯ resolution.
-       - Giá»¯ timing/FPS náº¿u cÃ³ thá»ƒ (fps_mode passthrough).
-       - Giá»¯ pixel format / bit depth náº¿u encoder há»— trá»£.
-       - Giá»¯ mÃ u/HDR metadata khi cÃ³ thá»ƒ.
-       - KhÃ´ng upscale.
-       - Æ¯u tiÃªn cháº¥t lÆ°á»£ng cao.
-7. Tolerance flags Ä‘Æ°á»£c báº­t cho Má»ŒI lá»‡nh FFmpeg.
-8. Output chá»‰ Ä‘Æ°á»£c xem lÃ  thÃ nh cÃ´ng sau khi probe láº¡i, cÃ³ video + audio
-   (náº¿u nguá»“n cÃ³), duration â‰¥ 90% so vá»›i nguá»“n.
-9. KhÃ´ng thao tÃ¡c Tkinter trá»±c tiáº¿p tá»« worker thread.
+1. Container đích quyết định codec nào được phép giữ.
+2. Stream bình thường được COPY nếu có thể.
+3. Stream không tương thích mới CONVERT (không ép copy codec ngoài allowlist).
+4. Stream rác / không cần thiết mới DROP.
+5. Khi FFmpeg thất bại:
+       COPY (chịu lỗi tối đa) → CONVERT → DROP
+   Video/audio gốc đã lỗi sẵn → ưu tiên copy chịu lỗi; chỉ convert khi
+   công cụ thực sự từ chối (muxer refuse). Không tự ý DROP video/audio chính.
+6. Khi bắt buộc re-encode video:
+       - Giữ resolution.
+       - Giữ timing/FPS nếu có thể (fps_mode passthrough).
+       - Giữ pixel format / bit depth nếu encoder hỗ trợ.
+       - Giữ màu/HDR metadata khi có thể.
+       - Không upscale.
+       - Ưu tiên chất lượng cao.
+7. Tolerance flags được bật cho MỌI lệnh FFmpeg.
+8. Output chỉ được xem là thành công sau khi probe lại, có video + audio
+   (nếu nguồn có), duration ≥ 90% so với nguồn.
+9. Không thao tác Tkinter trực tiếp từ worker thread.
 
 -------------------------------------------------------------------------------
 CHANGELOG v3.9.5 (UI only):
 
-[N1] ThÃªm popup thÃ´ng bÃ¡o khi hÃ ng Ä‘á»£i xá»­ lÃ½ xong:
-       - Hiá»ƒn thá»‹ tá»•ng sá»‘ file, sá»‘ thÃ nh cÃ´ng / tháº¥t báº¡i / Ä‘Ã£ huá»· / chÆ°a xá»­ lÃ½.
-       - KÃ¨m Ä‘Æ°á»ng dáº«n thÆ° má»¥c xuáº¥t.
-       - Náº¿u táº¥t cáº£ thÃ nh cÃ´ng â†’ showinfo (âœ… HoÃ n táº¥t).
-       - Náº¿u cÃ³ file fail / huá»· / chÆ°a xá»­ lÃ½ â†’ showwarning (âš  Xá»­ lÃ½ xong).
-     CHá»ˆ sá»­a UI, khÃ´ng Ä‘á»¥ng logic worker / engine.
+[N1] Thêm popup thông báo khi hàng đợi xử lý xong:
+       - Hiển thị tổng số file, số thành công / thất bại / đã huỷ / chưa xử lý.
+       - Kèm đường dẫn thư mục xuất.
+       - Nếu tất cả thành công → showinfo (✅ Hoàn tất).
+       - Nếu có file fail / huỷ / chưa xử lý → showwarning (⚠ Xử lý xong).
+     CHỈ sửa UI, không đụng logic worker / engine.
 
-CÃ¡c fix tá»« v2.7 â†’ v3.9.4 váº«n giá»¯ nguyÃªn.
-KhÃ´ng Ä‘á»¥ng vÃ o: container matrix, plan structure, encoder preset mapping,
+Các fix từ v2.7 → v3.9.4 vẫn giữ nguyên.
+Không đụng vào: container matrix, plan structure, encoder preset mapping,
 DnD core, thread model, naming policy, verify logic, checkbox logic,
-cÃ¡c button khÃ¡c, fallback ladder, emergency command.
+các button khác, fallback ladder, emergency command.
 
 -------------------------------------------------------------------------------
-CHANGELOG v3.9.4 (fix bug thÆ° má»¥c xuáº¥t):
+CHANGELOG v3.9.4 (fix bug thư mục xuất):
 
-[F14] ThÆ° má»¥c xuáº¥t nháº­p tay khÃ´ng Ä‘Æ°á»£c Ã¡p dá»¥ng khi báº¥m tháº³ng nÃºt Start:
-     - Fix: trong start_processing() chá»§ Ä‘á»™ng gá»i _on_outdir_changed()
-       Ä‘á»ƒ Ä‘á»“ng bá»™ Entry â†’ self.output_dir ngay trÆ°á»›c khi spawn worker.
-     NgoÃ i ra _on_outdir_changed() chuáº©n hoÃ¡ Ä‘Æ°á»ng dáº«n tÆ°Æ¡ng Ä‘á»‘i thÃ nh
-     tuyá»‡t Ä‘á»‘i Ä‘á»ƒ trÃ¡nh ghi nháº§m vÃ o CWD.
+[F14] Thư mục xuất nhập tay không được áp dụng khi bấm thẳng nút Start:
+     - Fix: trong start_processing() chủ động gọi _on_outdir_changed()
+       để đồng bộ Entry → self.output_dir ngay trước khi spawn worker.
+     Ngoài ra _on_outdir_changed() chuẩn hoá đường dẫn tương đối thành
+     tuyệt đối để tránh ghi nhầm vào CWD.
 
 -------------------------------------------------------------------------------
 CHANGELOG v3.9.3 (UI only):
 
-[U2] ThÃªm menu chuá»™t pháº£i (Context Menu) cho tá»«ng file trong danh sÃ¡ch:
-       - Báº­t / Táº¯t file (toggle)
-       - Má»Ÿ file nguá»“n (báº±ng trÃ¬nh phÃ¡t máº·c Ä‘á»‹nh cá»§a OS)
-       - Má»Ÿ thÆ° má»¥c chá»©a file nguá»“n
-       - XoÃ¡ khá»i danh sÃ¡ch
-     Menu cÃ³ mÃ u tá»‘i Ä‘á»“ng bá»™ vá»›i theme cá»§a app. CHá»ˆ sá»­a UI, khÃ´ng Ä‘á»¥ng logic.
+[U2] Thêm menu chuột phải (Context Menu) cho từng file trong danh sách:
+       - Bật / Tắt file (toggle)
+       - Mở file nguồn (bằng trình phát mặc định của OS)
+       - Mở thư mục chứa file nguồn
+       - Xoá khỏi danh sách
+     Menu có màu tối đồng bộ với theme của app. CHỈ sửa UI, không đụng logic.
 
 -------------------------------------------------------------------------------
 CHANGELOG v3.9.2 (UI only):
 
-[U1] Dropdown "Video Codec" giá» tá»± Ä‘á»™ng lá»c theo Container Ä‘ang chá»n.
-     Khi Ä‘á»•i Container, náº¿u codec Ä‘ang chá»n khÃ´ng cÃ²n há»£p lá»‡, tá»± reset vá»
-     option Ä‘áº§u tiÃªn vÃ  ghi log cáº£nh bÃ¡o. CHá»ˆ sá»­a UI, khÃ´ng Ä‘á»¥ng logic.
+[U1] Dropdown "Video Codec" giờ tự động lọc theo Container đang chọn.
+     Khi đổi Container, nếu codec đang chọn không còn hợp lệ, tự reset về
+     option đầu tiên và ghi log cảnh báo. CHỈ sửa UI, không đụng logic.
 
 -------------------------------------------------------------------------------
 CHANGELOG v3.9.1 (GPU + UI):
 
-[G1] ThÃªm há»— trá»£ NVIDIA NVENC (h264_nvenc / hevc_nvenc / av1_nvenc).
-     Tá»± fallback CPU náº¿u GPU/encoder khÃ´ng kháº£ dá»¥ng.
-[G2] Fix giáº­t thanh tiáº¿n trÃ¬nh: chá»‰ váº½ láº¡i canvas % cá»§a task Ä‘ang cháº¡y,
-     khÃ´ng rebuild toÃ n bá»™ file list má»—i láº§n update progress.
-[G3] ThÆ° má»¥c xuáº¥t: cho phÃ©p gÃµ tay Ä‘Æ°á»ng dáº«n (Entry), thÃªm nÃºt "ðŸ“‚ Má»Ÿ"
-     Ä‘á»ƒ má»Ÿ thÆ° má»¥c báº±ng trÃ¬nh quáº£n lÃ½ file cá»§a OS.
+[G1] Thêm hỗ trợ NVIDIA NVENC (h264_nvenc / hevc_nvenc / av1_nvenc).
+     Tự fallback CPU nếu GPU/encoder không khả dụng.
+[G2] Fix giật thanh tiến trình: chỉ vẽ lại canvas % của task đang chạy,
+     không rebuild toàn bộ file list mỗi lần update progress.
+[G3] Thư mục xuất: cho phép gõ tay đường dẫn (Entry), thêm nút "📂 Mở"
+     để mở thư mục bằng trình quản lý file của OS.
 
 -------------------------------------------------------------------------------
-CHANGELOG v3.9 (fix theo review cuá»‘i):
+CHANGELOG v3.9 (fix theo review cuối):
 
-[F13] attached_pic khi bá»‹ Ã©p convert â†’ DROP thay vÃ¬ táº¡o track "video" giáº£.
+[F13] attached_pic khi bị ép convert → DROP thay vì tạo track "video" giả.
 
-CÃ¡c fix tá»« v2.7 â†’ v3.8 váº«n giá»¯ nguyÃªn.
+Các fix từ v2.7 → v3.8 vẫn giữ nguyên.
 
 -------------------------------------------------------------------------------
 CHANGELOG BUILD/PACKAGING (v3.9.5-pack):
 
-[P1] ThÃªm helper _app_base_dir() / _bundle_dir() / find_binary() /
-     find_resource() Ä‘á»ƒ app tá»± tÃ¬m ffmpeg / ffprobe / icon.ico khi Ä‘Ã³ng gÃ³i
-     PyInstaller (onedir hoáº·c onefile).
-       - Æ¯u tiÃªn 1: cáº¡nh file EXE (onedir: cÃ¹ng folder vá»›i EXE).
-       - Æ¯u tiÃªn 2: thÆ° má»¥c _internal / _MEIPASS (bundle PyInstaller).
-       - Æ¯u tiÃªn 3: PATH cá»§a OS.
-[P2] ConversionEngine.__init__ dÃ¹ng find_binary() Ä‘á»ƒ resolve ffmpeg/ffprobe.
-[P3] VideoConverterUI tá»± set icon cá»­a sá»• tá»« icon.ico (cáº¡nh EXE hoáº·c bundle).
-     Chá»‰ thÃªm UI setup, khÃ´ng Ä‘á»¥ng logic worker/engine.
-[P4] Dark title bar trÃªn Windows 10/11 qua DwmSetWindowAttribute.
-     Gá»i 2 láº§n (ngay + after 20ms) Ä‘á»ƒ Ä‘áº£m báº£o HWND Ä‘Ã£ sáºµn sÃ ng.
-     TrÃªn OS khÃ¡c tá»± bá» qua im láº·ng. CHá»ˆ sá»­a UI, khÃ´ng Ä‘á»¥ng logic.
-[P5] Nháº­n file/thÆ° má»¥c tá»« command line ("Open with...", kÃ©o tháº£ vÃ o exe).
-     main() Ä‘á»c sys.argv[1:] vÃ  gá»i load_cli_args() sau khi UI khá»Ÿi Ä‘á»™ng.
-     CHá»ˆ thÃªm task vÃ o danh sÃ¡ch, khÃ´ng Ä‘á»¥ng logic convert.
+[P1] Thêm helper _app_base_dir() / _bundle_dir() / find_binary() /
+     find_resource() để app tự tìm ffmpeg / ffprobe / icon.ico khi đóng gói
+     PyInstaller (onedir hoặc onefile).
+       - Ưu tiên 1: cạnh file EXE (onedir: cùng folder với EXE).
+       - Ưu tiên 2: thư mục _internal / _MEIPASS (bundle PyInstaller).
+       - Ưu tiên 3: PATH của OS.
+[P2] ConversionEngine.__init__ dùng find_binary() để resolve ffmpeg/ffprobe.
+[P3] VideoConverterUI tự set icon cửa sổ từ icon.ico (cạnh EXE hoặc bundle).
+     Chỉ thêm UI setup, không đụng logic worker/engine.
+[P4] Dark title bar trên Windows 10/11 qua DwmSetWindowAttribute.
+     Gọi 2 lần (ngay + after 20ms) để đảm bảo HWND đã sẵn sàng.
+     Trên OS khác tự bỏ qua im lặng. CHỈ sửa UI, không đụng logic.
+[P5] Nhận file/thư mục từ command line ("Open with...", kéo thả vào exe).
+     main() đọc sys.argv[1:] và gọi load_cli_args() sau khi UI khởi động.
+     CHỈ thêm task vào danh sách, không đụng logic convert.
 -------------------------------------------------------------------------------
 """
 
@@ -145,12 +145,12 @@ except ImportError:
 # =============================================================================
 
 def _app_base_dir() -> Path:
-    """ThÆ° má»¥c gá»‘c chá»©a app.
+    """Thư mục gốc chứa app.
 
-    - Frozen (PyInstaller): thÆ° má»¥c chá»©a file .exe.
-      Onedir  â†’ dist/VideoConvertPro/  (chá»©a exe + _internal/)
-      Onefile â†’ thÆ° má»¥c user cháº¡y exe (chá»‰ cÃ³ exe).
-    - Dev: thÆ° má»¥c chá»©a script .py.
+    - Frozen (PyInstaller): thư mục chứa file .exe.
+      Onedir  → dist/VideoConvertPro/  (chứa exe + _internal/)
+      Onefile → thư mục user chạy exe (chỉ có exe).
+    - Dev: thư mục chứa script .py.
     """
     if getattr(sys, "frozen", False):
         try:
@@ -161,10 +161,10 @@ def _app_base_dir() -> Path:
 
 
 def _bundle_dir() -> Optional[Path]:
-    """ThÆ° má»¥c táº¡m PyInstaller giáº£i nÃ©n bundle (_MEIPASS).
+    """Thư mục tạm PyInstaller giải nén bundle (_MEIPASS).
 
-    PyInstaller â‰¥ 5.x Ä‘áº·t _MEIPASS = .../_internal vá»›i onedir,
-    vÃ  = thÆ° má»¥c _MEIxxxx vá»›i onefile. Tráº£ None náº¿u cháº¡y dev.
+    PyInstaller ≥ 5.x đặt _MEIPASS = .../_internal với onedir,
+    và = thư mục _MEIxxxx với onefile. Trả None nếu chạy dev.
     """
     meipass = getattr(sys, "_MEIPASS", None)
     if not meipass:
@@ -176,8 +176,8 @@ def _bundle_dir() -> Optional[Path]:
 
 
 def _candidate_dirs() -> List[Path]:
-    """Thá»© tá»± Æ°u tiÃªn tÃ¬m binary/resource:
-        1. Cáº¡nh EXE (cho phÃ©p user drop thÃªm ffmpeg ngoÃ i cÃ¹ng folder).
+    """Thứ tự ưu tiên tìm binary/resource:
+        1. Cạnh EXE (cho phép user drop thêm ffmpeg ngoài cùng folder).
         2. _MEIPASS / _internal (bundle PyInstaller).
     """
     dirs: List[Path] = []
@@ -192,10 +192,10 @@ def _candidate_dirs() -> List[Path]:
 
 
 def find_binary(name: str) -> str:
-    """TÃ¬m binary (ffmpeg, ffprobe).
+    """Tìm binary (ffmpeg, ffprobe).
 
-    Tráº£ absolute path náº¿u tÃ¬m tháº¥y, ngÆ°á»£c láº¡i tráº£ nguyÃªn `name` Ä‘á»ƒ OS
-    tá»± resolve qua PATH.
+    Trả absolute path nếu tìm thấy, ngược lại trả nguyên `name` để OS
+    tự resolve qua PATH.
     """
     exe_exts: Tuple[str, ...] = (".exe", "") if os.name == "nt" else ("",)
     for d in _candidate_dirs():
@@ -210,7 +210,7 @@ def find_binary(name: str) -> str:
 
 
 def find_resource(name: str) -> Optional[Path]:
-    """TÃ¬m resource (icon, asset). Tráº£ Path náº¿u cÃ³, None náº¿u khÃ´ng."""
+    """Tìm resource (icon, asset). Trả Path nếu có, None nếu không."""
     for d in _candidate_dirs():
         candidate = d / name
         try:
@@ -310,8 +310,8 @@ CONTAINER_COMPAT = {
     },
 }
 
-# [U1] Map Container (label UI) â†’ danh sÃ¡ch codec video (label UI) há»£p lá»‡.
-# CHá»ˆ dÃ¹ng Ä‘á»ƒ lá»c dropdown trÃªn UI. Logic engine váº«n dÃ¹ng CONTAINER_COMPAT.
+# [U1] Map Container (label UI) → danh sách codec video (label UI) hợp lệ.
+# CHỈ dùng để lọc dropdown trên UI. Logic engine vẫn dùng CONTAINER_COMPAT.
 CONTAINER_CODEC_UI_MAP = {
     "MP4":  ["H.264", "H.265 / HEVC", "AV1"],
     "MKV":  ["H.264", "H.265 / HEVC", "VP9", "AV1"],
@@ -374,7 +374,7 @@ ENCODER_TO_CODEC_NAME = {
     "av1_nvenc": "av1",
 }
 
-# Map codec â†’ encoder NVENC tÆ°Æ¡ng á»©ng
+# Map codec → encoder NVENC tương ứng
 NVENC_ENCODER_FOR_CODEC = {
     "h264": "h264_nvenc",
     "hevc": "hevc_nvenc",
@@ -382,7 +382,7 @@ NVENC_ENCODER_FOR_CODEC = {
     "av1": "av1_nvenc",
 }
 
-# Map preset libx264-style â†’ preset NVENC (p1..p7)
+# Map preset libx264-style → preset NVENC (p1..p7)
 NVENC_PRESET_MAP = {
     "ultrafast": "p1",
     "veryfast": "p2",
@@ -759,10 +759,10 @@ def smart_lossy_audio_bitrate(channels: int) -> str:
 class ConversionEngine:
 
     def __init__(self, ffmpeg_path=None, ffprobe_path=None):
-        # [P2] Tá»± resolve ffmpeg / ffprobe:
-        #   - Æ°u tiÃªn file cáº¡nh EXE
-        #   - sau Ä‘Ã³ tá»›i _internal/_MEIPASS (bundle PyInstaller)
-        #   - cuá»‘i cÃ¹ng má»›i Ä‘á»ƒ OS tÃ¬m trong PATH
+        # [P2] Tự resolve ffmpeg / ffprobe:
+        #   - ưu tiên file cạnh EXE
+        #   - sau đó tới _internal/_MEIPASS (bundle PyInstaller)
+        #   - cuối cùng mới để OS tìm trong PATH
         self.ffmpeg = ffmpeg_path or find_binary("ffmpeg")
         self.ffprobe = ffprobe_path or find_binary("ffprobe")
         self._encoder_cache: Dict[str, bool] = {}
@@ -783,9 +783,9 @@ class ConversionEngine:
                     creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
                 )
                 if result.returncode != 0:
-                    return False, f"{name} khÃ´ng cháº¡y Ä‘Æ°á»£c."
+                    return False, f"{name} không chạy được."
             except Exception as exc:
-                return False, f"KhÃ´ng tÃ¬m tháº¥y {name}: {exc}"
+                return False, f"Không tìm thấy {name}: {exc}"
         return True, "FFmpeg / FFprobe OK."
 
     def _get_ffmpeg_version(self) -> Tuple[int, int]:
@@ -841,7 +841,7 @@ class ConversionEngine:
         return available
 
     def _nvenc_is_available(self, encoder: str) -> bool:
-        """Kiá»ƒm tra NVENC thá»±c táº¿ má»™t láº§n vÃ  cache káº¿t quáº£ theo tá»«ng encoder."""
+        """Kiểm tra NVENC thực tế một lần và cache kết quả theo từng encoder."""
         if encoder in self._nvenc_runtime_cache:
             return self._nvenc_runtime_cache[encoder]
         if not self.has_encoder(encoder):
@@ -873,7 +873,7 @@ class ConversionEngine:
         requested_codec: str,
         allowed_codecs,
     ) -> Optional[str]:
-        """Chá»n NVENC encoder phÃ¹ há»£p náº¿u GPU + codec kháº£ dá»¥ng."""
+        """Chọn NVENC encoder phù hợp nếu GPU + codec khả dụng."""
         codec_name_map = {
             "h264_nvenc": "h264",
             "hevc_nvenc": "hevc",
@@ -892,7 +892,7 @@ class ConversionEngine:
                 return nvenc
             return None
 
-        # Auto: thá»­ láº§n lÆ°á»£t h264 â†’ hevc â†’ av1
+        # Auto: thử lần lượt h264 → hevc → av1
         for enc in ("h264_nvenc", "hevc_nvenc", "av1_nvenc"):
             if _ok(enc):
                 return enc
@@ -1002,7 +1002,7 @@ class ConversionEngine:
                         bitrate = None
                     return (
                         profile.audio_codec, bitrate, None, [],
-                        "NgÆ°á»i dÃ¹ng chá»‰ Ä‘á»‹nh codec audio.",
+                        "Người dùng chỉ định codec audio.",
                     )
 
         source_is_lossless = self.is_lossless_audio(stream.codec_name)
@@ -1013,11 +1013,11 @@ class ConversionEngine:
                 extra = LOSSLESS_AUDIO_ENCODE_EXTRA.get(lossless_codec, [])
                 return (
                     lossless_codec, None, None, extra,
-                    f"Nguá»“n lossless â†’ giá»¯ lossless ({lossless_codec}).",
+                    f"Nguồn lossless → giữ lossless ({lossless_codec}).",
                 )
             downgrade_prefix = (
-                f"Nguá»“n lossless nhÆ°ng {target_container} khÃ´ng cÃ³ "
-                f"codec lossless kháº£ dá»¥ng â†’ háº¡ xuá»‘ng lossy cháº¥t lÆ°á»£ng cao nháº¥t: "
+                f"Nguồn lossless nhưng {target_container} không có "
+                f"codec lossless khả dụng → hạ xuống lossy chất lượng cao nhất: "
             )
         else:
             downgrade_prefix = ""
@@ -1026,19 +1026,19 @@ class ConversionEngine:
             bitrate = smart_lossy_audio_bitrate(stream.channels)
             return (
                 "libopus", bitrate, None, [("vbr", "on")],
-                downgrade_prefix + f"Opus VBR cháº¥t lÆ°á»£ng cao (~{bitrate}).",
+                downgrade_prefix + f"Opus VBR chất lượng cao (~{bitrate}).",
             )
 
         if target_container == "avi":
             return (
                 "libmp3lame", None, "0", [],
-                downgrade_prefix + "MP3 VBR cháº¥t lÆ°á»£ng cao nháº¥t (-q:a 0).",
+                downgrade_prefix + "MP3 VBR chất lượng cao nhất (-q:a 0).",
             )
 
         if self.has_encoder("libfdk_aac"):
             return (
                 "libfdk_aac", None, "5", [],
-                downgrade_prefix + "AAC VBR cháº¥t lÆ°á»£ng cao nháº¥t (libfdk_aac, tÆ°Æ¡ng Ä‘Æ°Æ¡ng chuáº©n Apple).",
+                downgrade_prefix + "AAC VBR chất lượng cao nhất (libfdk_aac, tương đương chuẩn Apple).",
             )
 
         target_bitrate = profile.audio_bitrate or smart_lossy_audio_bitrate(
@@ -1047,7 +1047,7 @@ class ConversionEngine:
         return (
             "aac", target_bitrate, None, [],
             downgrade_prefix
-            + f"AAC cháº¥t lÆ°á»£ng cao (FFmpeg AAC gá»‘c, CBR co giÃ£n theo kÃªnh: {target_bitrate}).",
+            + f"AAC chất lượng cao (FFmpeg AAC gốc, CBR co giãn theo kênh: {target_bitrate}).",
         )
 
     def run_ffprobe_raw(self, source: Path, analyze_time="10M"):
@@ -1090,12 +1090,12 @@ class ConversionEngine:
             stderr += "\n" + stderr2
             if data:
                 report.types.add(IssueType.HEADER)
-                report.details.append("Probe cáº§n má»©c phÃ¢n tÃ­ch 200M.")
+                report.details.append("Probe cần mức phân tích 200M.")
 
         if not data:
             report.types.add(IssueType.HEADER)
             report.severity = "critical"
-            report.details.append("KhÃ´ng thá»ƒ Ä‘á»c metadata báº±ng FFprobe.")
+            report.details.append("Không thể đọc metadata bằng FFprobe.")
             if stderr.strip():
                 report.details.append(stderr.strip()[-1500:])
             return None, report
@@ -1173,13 +1173,13 @@ class ConversionEngine:
             report.types.add(IssueType.CONTAINER_MISMATCH)
             report.detected_format = real_format
             report.details.append(
-                f"Extension .{ext} nhÆ°ng container thá»±c táº¿ lÃ  {real_format}."
+                f"Extension .{ext} nhưng container thực tế là {real_format}."
             )
 
         if not probe.streams:
             report.types.add(IssueType.HEADER)
             report.severity = "critical"
-            report.details.append("KhÃ´ng tÃ¬m tháº¥y stream.")
+            report.details.append("Không tìm thấy stream.")
             return probe, report
 
         if not any(
@@ -1187,11 +1187,11 @@ class ConversionEngine:
             for s in probe.streams
         ):
             report.types.add(IssueType.HEADER)
-            report.details.append("KhÃ´ng tÃ¬m tháº¥y video chÃ­nh.")
+            report.details.append("Không tìm thấy video chính.")
 
         if probe.duration <= 0:
             report.types.add(IssueType.TRUNCATED)
-            report.details.append("Duration báº±ng 0 hoáº·c header báº¥t thÆ°á»ng.")
+            report.details.append("Duration bằng 0 hoặc header bất thường.")
 
         if stderr.strip():
             lower = stderr.lower()
@@ -1203,7 +1203,7 @@ class ConversionEngine:
             if any(w in lower for w in corruption_words):
                 report.types.add(IssueType.CORRUPT_PACKETS)
                 report.details.append(
-                    "FFprobe phÃ¡t hiá»‡n dáº¥u hiá»‡u packet/decode báº¥t thÆ°á»ng."
+                    "FFprobe phát hiện dấu hiệu packet/decode bất thường."
                 )
 
         if report.has_any() and report.severity == "ok":
@@ -1263,7 +1263,7 @@ class ConversionEngine:
 
         if stream.codec_type == "data":
             if not profile.keep_data_streams:
-                return True, "Data stream khÃ´ng cáº§n thiáº¿t."
+                return True, "Data stream không cần thiết."
             return False, ""
 
         if stream.codec_type == "unknown":
@@ -1300,7 +1300,7 @@ class ConversionEngine:
         allowed = compat.get("video_allowed")
         requested = (profile.video_codec or "").lower()
 
-        # [GPU] Æ¯u tiÃªn NVENC khi user báº­t vÃ  GPU kháº£ dá»¥ng.
+        # [GPU] Ưu tiên NVENC khi user bật và GPU khả dụng.
         if getattr(profile, "use_gpu", False):
             nvenc = self._pick_nvenc_encoder(requested, allowed)
             if nvenc:
@@ -1313,19 +1313,19 @@ class ConversionEngine:
             if container_ok and self.has_encoder(encoder):
                 return encoder, ""
             if not container_ok:
-                why = f"{target_container} khÃ´ng há»— trá»£ {codec_name}"
+                why = f"{target_container} không hỗ trợ {codec_name}"
             else:
-                why = f"FFmpeg hiá»‡n táº¡i thiáº¿u encoder {encoder}"
+                why = f"FFmpeg hiện tại thiếu encoder {encoder}"
             for fb_encoder in VIDEO_ENCODER_FALLBACK_ORDER:
                 fb_codec_name = ENCODER_TO_CODEC_NAME.get(fb_encoder, "")
                 if (allowed is None or fb_codec_name in allowed) and self.has_encoder(fb_encoder):
                     return fb_encoder, (
-                        f"{why} â†’ dÃ¹ng {fb_codec_name} thay cho "
-                        f"{requested} báº¡n Ä‘Ã£ chá»n."
+                        f"{why} → dùng {fb_codec_name} thay cho "
+                        f"{requested} bạn đã chọn."
                     )
             default_encoder = compat.get("video_default", "libx264")
             return default_encoder, (
-                f"{why} â†’ dÃ¹ng {default_encoder} thay cho {requested} báº¡n Ä‘Ã£ chá»n."
+                f"{why} → dùng {default_encoder} thay cho {requested} bạn đã chọn."
             )
 
         for encoder in VIDEO_ENCODER_FALLBACK_ORDER:
@@ -1413,7 +1413,7 @@ class ConversionEngine:
             crf = int(profile.video_crf)
 
         if encoder in {"h264_nvenc", "hevc_nvenc", "av1_nvenc"}:
-            # NVENC: dÃ¹ng -rc vbr + -cq (constant quality), -b:v 0 = quality mode.
+            # NVENC: dùng -rc vbr + -cq (constant quality), -b:v 0 = quality mode.
             flags += [f"-rc:v:{out_idx}", "vbr"]
             flags += [f"-cq:v:{out_idx}", str(crf)]
             flags += [f"-b:v:{out_idx}", "0"]
@@ -1527,16 +1527,16 @@ class ConversionEngine:
                         continue
 
                 if forced == "convert":
-                    # F13: attached_pic bá»‹ Ã©p convert â†’ DROP.
-                    # ffprobe bÃ¡o codec_type="video" cho cover art, nÃªn
-                    # náº¿u khÃ´ng check is_attached_pic trÆ°á»›c, code sáº½ rÆ¡i
-                    # vÃ o nhÃ¡nh video convert bÃªn dÆ°á»›i vÃ  táº¡o track
-                    # "video" giáº£ khÃ´ng cÃ³ disposition attached_pic.
-                    # Cover art lÃ  phá»¥ â€” há»ng thÃ¬ drop, khÃ´ng Ä‘Ã¡ng convert.
+                    # F13: attached_pic bị ép convert → DROP.
+                    # ffprobe báo codec_type="video" cho cover art, nên
+                    # nếu không check is_attached_pic trước, code sẽ rơi
+                    # vào nhánh video convert bên dưới và tạo track
+                    # "video" giả không có disposition attached_pic.
+                    # Cover art là phụ — hỏng thì drop, không đáng convert.
                     if stream.is_attached_pic:
                         actions.append(StreamAction(
                             stream.index, "attachment", "drop",
-                            "Cover art khÃ´ng cÃ²n giá»¯ Ä‘Æ°á»£c (fallback).",
+                            "Cover art không còn giữ được (fallback).",
                         ))
                         continue
 
@@ -1544,7 +1544,7 @@ class ConversionEngine:
                         v_encoder, v_note = self.target_video_encoder(profile, target)
                         actions.append(StreamAction(
                             stream.index, "video", "convert",
-                            "Fallback: video CONVERT" + (f" â€” {v_note}" if v_note else ""),
+                            "Fallback: video CONVERT" + (f" — {v_note}" if v_note else ""),
                             target_codec=v_encoder,
                         ))
                     elif stream.codec_type == "audio":
@@ -1553,7 +1553,7 @@ class ConversionEngine:
                         )
                         actions.append(StreamAction(
                             stream.index, "audio", "convert",
-                            f"Fallback: audio CONVERT â€” {reason}",
+                            f"Fallback: audio CONVERT — {reason}",
                             target_codec=codec,
                             target_bitrate=bitrate,
                             audio_vbr_quality=vbr_q,
@@ -1582,7 +1582,7 @@ class ConversionEngine:
                 if profile.keep_attachments:
                     actions.append(StreamAction(
                         stream.index, "attachment", "copy",
-                        "Cover art giá»¯ nguyÃªn.",
+                        "Cover art giữ nguyên.",
                     ))
                 continue
 
@@ -1591,7 +1591,7 @@ class ConversionEngine:
                     v_encoder, v_note = self.target_video_encoder(profile, target)
                     actions.append(StreamAction(
                         stream.index, "video", "convert",
-                        "User chá»n Force Re-encode" + (f" â€” {v_note}" if v_note else ""),
+                        "User chọn Force Re-encode" + (f" — {v_note}" if v_note else ""),
                         target_codec=v_encoder,
                     ))
                     continue
@@ -1599,7 +1599,7 @@ class ConversionEngine:
                 if profile.video_mode == "copy":
                     actions.append(StreamAction(
                         stream.index, "video", "copy",
-                        "User chá»n Force Copy",
+                        "User chọn Force Copy",
                     ))
                     continue
 
@@ -1608,11 +1608,11 @@ class ConversionEngine:
                 if compatible:
                     actions.append(StreamAction(
                         stream.index, "video", "copy",
-                        "Video codec tÆ°Æ¡ng thÃ­ch.",
+                        "Video codec tương thích.",
                     ))
                 else:
                     v_encoder, v_note = self.target_video_encoder(profile, target)
-                    reason = f"Codec {stream.codec_name} khÃ´ng tÆ°Æ¡ng thÃ­ch {target}."
+                    reason = f"Codec {stream.codec_name} không tương thích {target}."
                     if v_note:
                         reason += f" {v_note}"
                     actions.append(StreamAction(
@@ -1629,7 +1629,7 @@ class ConversionEngine:
                     )
                     actions.append(StreamAction(
                         stream.index, "audio", "convert",
-                        f"User chá»n Force Re-encode â€” {reason}",
+                        f"User chọn Force Re-encode — {reason}",
                         target_codec=codec,
                         target_bitrate=bitrate,
                         audio_vbr_quality=vbr_q,
@@ -1640,7 +1640,7 @@ class ConversionEngine:
                 if profile.audio_mode == "copy":
                     actions.append(StreamAction(
                         stream.index, "audio", "copy",
-                        "User chá»n Force Copy",
+                        "User chọn Force Copy",
                     ))
                     continue
 
@@ -1649,7 +1649,7 @@ class ConversionEngine:
                 if compatible:
                     actions.append(StreamAction(
                         stream.index, "audio", "copy",
-                        "Audio codec tÆ°Æ¡ng thÃ­ch.",
+                        "Audio codec tương thích.",
                     ))
                 else:
                     codec, bitrate, vbr_q, extra_idx, reason = (
@@ -1657,7 +1657,7 @@ class ConversionEngine:
                     )
                     actions.append(StreamAction(
                         stream.index, "audio", "convert",
-                        f"Codec {stream.codec_name} khÃ´ng tÆ°Æ¡ng thÃ­ch {target}. {reason}",
+                        f"Codec {stream.codec_name} không tương thích {target}. {reason}",
                         target_codec=codec,
                         target_bitrate=bitrate,
                         audio_vbr_quality=vbr_q,
@@ -1678,7 +1678,7 @@ class ConversionEngine:
                 if allowed is not None and len(allowed) == 0:
                     actions.append(StreamAction(
                         stream.index, "subtitle", "drop",
-                        f"{target} khÃ´ng há»— trá»£ subtitle.",
+                        f"{target} không hỗ trợ subtitle.",
                     ))
                     continue
 
@@ -1686,19 +1686,19 @@ class ConversionEngine:
                     if target == "mkv":
                         actions.append(StreamAction(
                             stream.index, "subtitle", "copy",
-                            "Bitmap subtitle giá»¯ nguyÃªn trong MKV.",
+                            "Bitmap subtitle giữ nguyên trong MKV.",
                         ))
                     else:
                         actions.append(StreamAction(
                             stream.index, "subtitle", "drop",
-                            f"Bitmap subtitle {stream.codec_name} khÃ´ng phÃ¹ há»£p {target}.",
+                            f"Bitmap subtitle {stream.codec_name} không phù hợp {target}.",
                         ))
                     continue
 
                 if allowed is None or stream.codec_name in allowed:
                     actions.append(StreamAction(
                         stream.index, "subtitle", "copy",
-                        "Subtitle codec tÆ°Æ¡ng thÃ­ch.",
+                        "Subtitle codec tương thích.",
                     ))
                     continue
 
@@ -1712,13 +1712,13 @@ class ConversionEngine:
                     else:
                         actions.append(StreamAction(
                             stream.index, "subtitle", "drop",
-                            "KhÃ´ng cÃ³ subtitle encoder phÃ¹ há»£p.",
+                            "Không có subtitle encoder phù hợp.",
                         ))
                     continue
 
                 actions.append(StreamAction(
                     stream.index, "subtitle", "drop",
-                    "Subtitle codec khÃ´ng tÆ°Æ¡ng thÃ­ch.",
+                    "Subtitle codec không tương thích.",
                 ))
                 continue
 
@@ -1726,13 +1726,13 @@ class ConversionEngine:
                 if profile.keep_data_streams and target in DATA_STREAM_CONTAINERS:
                     actions.append(StreamAction(
                         stream.index, "data", "copy",
-                        f"Data stream giá»¯ nguyÃªn trong {target}.",
+                        f"Data stream giữ nguyên trong {target}.",
                     ))
                 else:
                     reason = (
-                        "Data stream khÃ´ng cáº§n thiáº¿t."
+                        "Data stream không cần thiết."
                         if not profile.keep_data_streams
-                        else f"{target} khÃ´ng há»— trá»£ data stream."
+                        else f"{target} không hỗ trợ data stream."
                     )
                     actions.append(StreamAction(
                         stream.index, "data", "drop", reason,
@@ -1741,7 +1741,7 @@ class ConversionEngine:
 
             actions.append(StreamAction(
                 stream.index, stream.codec_type, "drop",
-                f"Stream type '{stream.codec_type}' khÃ´ng Ä‘Æ°á»£c há»— trá»£.",
+                f"Stream type '{stream.codec_type}' không được hỗ trợ.",
             ))
 
         active_video = [
@@ -1752,7 +1752,7 @@ class ConversionEngine:
             v_encoder, v_note = self.target_video_encoder(profile, target)
             actions.append(StreamAction(
                 primary_video.index, "video", "convert",
-                "Báº£o vá»‡ video chÃ­nh." + (f" {v_note}" if v_note else ""),
+                "Bảo vệ video chính." + (f" {v_note}" if v_note else ""),
                 target_codec=v_encoder,
             ))
 
@@ -2032,7 +2032,7 @@ class ConversionEngine:
                 creationflags=creationflags,
             )
         except Exception as exc:
-            return -1, f"KhÃ´ng thá»ƒ cháº¡y FFmpeg: {exc}"
+            return -1, f"Không thể chạy FFmpeg: {exc}"
 
         stderr_lines: List[str] = []
         stderr_lock = threading.Lock()
@@ -2090,7 +2090,7 @@ class ConversionEngine:
         plan: Optional[ConversionPlan] = None,
     ) -> Tuple[bool, str, Optional[VideoProbe]]:
         if not output.exists():
-            return False, "Output khÃ´ng tá»“n táº¡i.", None
+            return False, "Output không tồn tại.", None
 
         try:
             size = output.stat().st_size
@@ -2098,18 +2098,18 @@ class ConversionEngine:
             size = 0
 
         if size <= 0:
-            return False, "Output dung lÆ°á»£ng báº±ng 0.", None
+            return False, "Output dung lượng bằng 0.", None
 
         probe, report = self.lenient_probe(output)
         if not probe:
-            return False, "KhÃ´ng probe Ä‘Æ°á»£c output.", None
+            return False, "Không probe được output.", None
 
         has_video = any(
             s.codec_type == "video" and not s.is_attached_pic
             for s in probe.streams
         )
         if not has_video:
-            return False, "Output khÃ´ng cÃ³ video chÃ­nh.", probe
+            return False, "Output không có video chính.", probe
 
         source_audio = [
             s for s in source_probe.streams if s.codec_type == "audio"
@@ -2118,7 +2118,7 @@ class ConversionEngine:
             s for s in probe.streams if s.codec_type == "audio"
         ]
         if source_audio and not output_audio:
-            return False, "Output thiáº¿u audio (source cÃ³ audio).", probe
+            return False, "Output thiếu audio (source có audio).", probe
 
         warnings: List[str] = []
         if source_probe.duration > 0 and probe.duration > 0:
@@ -2126,7 +2126,7 @@ class ConversionEngine:
             if ratio < 0.90:
                 return (
                     False,
-                    f"Output quÃ¡ ngáº¯n: {ratio * 100:.1f}% so vá»›i nguá»“n "
+                    f"Output quá ngắn: {ratio * 100:.1f}% so với nguồn "
                     f"({probe.duration:.2f}s / {source_probe.duration:.2f}s).",
                     probe,
                 )
@@ -2163,14 +2163,14 @@ class ConversionEngine:
                     return (
                         False,
                         (
-                            f"Plan yÃªu cáº§u {action.codec_type}"
+                            f"Plan yêu cầu {action.codec_type}"
                             f"[{action_ordinal}] ({action.action}"
                             + (
-                                f" â†’ {action.target_codec}"
+                                f" → {action.target_codec}"
                                 if action.target_codec else ""
                             )
-                            + f") nhÆ°ng output khÃ´ng cÃ³ stream tÆ°Æ¡ng á»©ng "
-                            f"(output cÃ³ {len(actual_streams)} "
+                            + f") nhưng output không có stream tương ứng "
+                            f"(output có {len(actual_streams)} "
                             f"{action.codec_type})."
                         ),
                         probe,
@@ -2198,16 +2198,16 @@ class ConversionEngine:
                 if actual_codec != expected_codec:
                     warnings.append(
                         f"{action.codec_type}[{action_ordinal}] "
-                        f"{actual_codec}â‰ {expected_codec}"
+                        f"{actual_codec}≠{expected_codec}"
                     )
 
         if report and IssueType.CORRUPT_PACKETS in report.types:
-            warnings.append("cÃ³ packet corrupt trong output")
+            warnings.append("có packet corrupt trong output")
 
         if warnings:
             return (
                 True,
-                f"Output verified (cáº£nh bÃ¡o: {', '.join(warnings)}).",
+                f"Output verified (cảnh báo: {', '.join(warnings)}).",
                 probe,
             )
 
@@ -2251,7 +2251,7 @@ class VideoConverterUI(_AppBase):
         self.geometry("1120x820")
         self.minsize(960, 700)
 
-        # [P3] Set icon cá»­a sá»• tá»« icon.ico (cáº¡nh EXE hoáº·c trong bundle).
+        # [P3] Set icon cửa sổ từ icon.ico (cạnh EXE hoặc trong bundle).
         self._set_window_icon()
 
         self.engine = ConversionEngine()
@@ -2267,23 +2267,23 @@ class VideoConverterUI(_AppBase):
         self._drag_active = False
         self._default_canvas_bg = None
 
-        # LÆ°u reference tá»›i (canvas, label%) Ä‘á»ƒ cáº­p nháº­t tiáº¿n trÃ¬nh táº¡i chá»—,
-        # trÃ¡nh re-render toÃ n bá»™ danh sÃ¡ch gÃ¢y giáº­t hÃ¬nh.
+        # Lưu reference tới (canvas, label%) để cập nhật tiến trình tại chỗ,
+        # tránh re-render toàn bộ danh sách gây giật hình.
         self._progress_widgets: Dict[str, Tuple[tk.Canvas, tk.Label]] = {}
 
         self._scan_cancel_event = threading.Event()
         self._scan_in_progress = False
 
-        # Chá»‰ hiá»‡n popup tá»•ng káº¿t khi batch cÃ³ Ã­t nháº¥t 1 task Ä‘Æ°á»£c xá»­ lÃ½.
+        # Chỉ hiện popup tổng kết khi batch có ít nhất 1 task được xử lý.
         self._batch_task_count = 0
 
         self._setup_styles()
         self._build_layout()
         self._setup_drag_drop()
 
-        # [P4] Dark title bar â€” gá»i sau khi layout xong.
-        # Gá»i 2 láº§n: ngay bÃ¢y giá» + sau 20ms Ä‘á»ƒ cháº¯c cháº¯n HWND Ä‘Ã£ sáºµn sÃ ng
-        # (má»™t sá»‘ build Windows cáº§n Ä‘á»£i cá»­a sá»• hiá»‡n ra má»›i Äƒn attribute).
+        # [P4] Dark title bar — gọi sau khi layout xong.
+        # Gọi 2 lần: ngay bây giờ + sau 20ms để chắc chắn HWND đã sẵn sàng
+        # (một số build Windows cần đợi cửa sổ hiện ra mới ăn attribute).
         self._enable_dark_titlebar()
         self.after(20, self._enable_dark_titlebar)
 
@@ -2293,12 +2293,12 @@ class VideoConverterUI(_AppBase):
 
         self._cleanup_stale_temp_files()
 
-        self._log("Ready. FFmpeg / FFprobe sáº½ Ä‘Æ°á»£c kiá»ƒm tra khi báº¯t Ä‘áº§u.")
+        self._log("Ready. FFmpeg / FFprobe sẽ được kiểm tra khi bắt đầu.")
         if HAS_DND and getattr(self, "TkdndVersion", None):
-            self._log("ðŸ’¡ KÃ©o & tháº£ file video hoáº·c thÆ° má»¥c vÃ o cá»­a sá»• Ä‘á»ƒ thÃªm nhanh.")
+            self._log("💡 Kéo & thả file video hoặc thư mục vào cửa sổ để thêm nhanh.")
         else:
             self._log(
-                "â„¹ CÃ i `tkinterdnd2` Ä‘á»ƒ báº­t kÃ©o & tháº£: pip install tkinterdnd2"
+                "ℹ Cài `tkinterdnd2` để bật kéo & thả: pip install tkinterdnd2"
             )
 
     # -------------------------------------------------------------------------
@@ -2306,16 +2306,16 @@ class VideoConverterUI(_AppBase):
     # -------------------------------------------------------------------------
 
     def _set_window_icon(self):
-        """Náº¡p icon.ico cho cá»­a sá»• Tkinter.
+        """Nạp icon.ico cho cửa sổ Tkinter.
 
-        TÃ¬m theo thá»© tá»±: cáº¡nh EXE â†’ bundle _internal/_MEIPASS.
-        Chá»‰ Ã¡p dá»¥ng cho Windows/Linux (iconbitmap há»— trá»£ .ico).
+        Tìm theo thứ tự: cạnh EXE → bundle _internal/_MEIPASS.
+        Chỉ áp dụng cho Windows/Linux (iconbitmap hỗ trợ .ico).
         """
         try:
             icon_path = find_resource("icon.ico")
             if not icon_path:
                 return
-            # Æ¯u tiÃªn default= Ä‘á»ƒ má»i Toplevel cÅ©ng cÃ³ icon.
+            # Ưu tiên default= để mọi Toplevel cũng có icon.
             try:
                 self.iconbitmap(default=str(icon_path))
             except Exception:
@@ -2331,24 +2331,24 @@ class VideoConverterUI(_AppBase):
     # -------------------------------------------------------------------------
 
     def _enable_dark_titlebar(self):
-        """Báº­t dark mode cho thanh tiÃªu Ä‘á» Windows.
+        """Bật dark mode cho thanh tiêu đề Windows.
 
-        Chá»‰ cÃ³ tÃ¡c dá»¥ng trÃªn Windows 10 build 17763+ / Windows 11.
-        TrÃªn OS khÃ¡c hoáº·c Windows cÅ© hÆ¡n, hÃ m tá»± bá» qua im láº·ng.
+        Chỉ có tác dụng trên Windows 10 build 17763+ / Windows 11.
+        Trên OS khác hoặc Windows cũ hơn, hàm tự bỏ qua im lặng.
         """
         if os.name != "nt":
             return
         try:
             import ctypes
 
-            # Äáº£m báº£o native window Ä‘Ã£ tá»“n táº¡i trÆ°á»›c khi láº¥y HWND.
+            # Đảm bảo native window đã tồn tại trước khi lấy HWND.
             try:
                 self.update_idletasks()
             except Exception:
                 pass
 
-            # Tk toplevel: winfo_id() tráº£ HWND cá»§a widget, parent má»›i lÃ 
-            # HWND top-level tháº­t sá»± mÃ  DWM cáº§n.
+            # Tk toplevel: winfo_id() trả HWND của widget, parent mới là
+            # HWND top-level thật sự mà DWM cần.
             try:
                 hwnd = ctypes.windll.user32.GetParent(self.winfo_id())
             except Exception:
@@ -2359,8 +2359,8 @@ class VideoConverterUI(_AppBase):
             value = ctypes.c_int(1)
 
             # Attribute ID:
-            #   20 â†’ Windows 11 / Windows 10 build 19041+
-            #   19 â†’ Windows 10 build 17763 â€“ 19041 (fallback)
+            #   20 → Windows 11 / Windows 10 build 19041+
+            #   19 → Windows 10 build 17763 – 19041 (fallback)
             for attr in (20, 19):
                 try:
                     res = ctypes.windll.dwmapi.DwmSetWindowAttribute(
@@ -2374,9 +2374,9 @@ class VideoConverterUI(_AppBase):
                 except Exception:
                     continue
 
-            # (Tuá»³ chá»n) Ã©p mÃ u caption khá»›p bg app â€” Windows 11 22000+
+            # (Tuỳ chọn) ép màu caption khớp bg app — Windows 11 22000+
             try:
-                # COLORREF = 0x00BBGGRR (Ä‘áº£o ngÆ°á»£c RGB)
+                # COLORREF = 0x00BBGGRR (đảo ngược RGB)
                 r, g, b = 0x0d, 0x11, 0x17
                 colorref = (b << 16) | (g << 8) | r
                 c_color = ctypes.c_int(colorref)
@@ -2385,7 +2385,7 @@ class VideoConverterUI(_AppBase):
                     ctypes.byref(c_color),
                     ctypes.sizeof(c_color),
                 )
-                # Text trÃªn caption
+                # Text trên caption
                 c_text = ctypes.c_int(0x00E6EDF3)  # #e6edf3 (text color)
                 ctypes.windll.dwmapi.DwmSetWindowAttribute(
                     hwnd, 36,  # DWMWA_TEXT_COLOR
@@ -2439,8 +2439,8 @@ class VideoConverterUI(_AppBase):
     def _on_close(self):
         if self.is_processing or self._scan_in_progress:
             if not messagebox.askokcancel(
-                "ThoÃ¡t",
-                "Äang xá»­ lÃ½. Dá»«ng vÃ  thoÃ¡t?",
+                "Thoát",
+                "Đang xử lý. Dừng và thoát?",
             ):
                 return
             self.cancel_event.set()
@@ -2547,7 +2547,7 @@ class VideoConverterUI(_AppBase):
         header.pack(fill="x")
 
         ttk.Label(
-            header, text="ðŸŽ¬ Video Converter Pro",
+            header, text="🎬 Video Converter Pro",
             style="Title.TLabel",
         ).pack(side="left")
 
@@ -2593,7 +2593,7 @@ class VideoConverterUI(_AppBase):
         self.controls["cb_crf"].set("17")
         self.controls["cb_preset"].set("slow")
 
-        # [U1] Lá»c codec theo container + Ä‘á»“ng bá»™ khi user Ä‘á»•i container.
+        # [U1] Lọc codec theo container + đồng bộ khi user đổi container.
         self.controls["cb_target"].bind(
             "<<ComboboxSelected>>", self._on_container_changed,
         )
@@ -2617,49 +2617,49 @@ class VideoConverterUI(_AppBase):
         row2.pack(fill="x", pady=(4, 0))
 
         self._chk_metadata = ttk.Checkbutton(
-            row1, text="Giá»¯ metadata",
+            row1, text="Giữ metadata",
             variable=self.keep_metadata_var,
         )
         self._chk_metadata.pack(side="left", padx=8)
 
         self._chk_chapters = ttk.Checkbutton(
-            row1, text="Giá»¯ chapters",
+            row1, text="Giữ chapters",
             variable=self.keep_chapters_var,
         )
         self._chk_chapters.pack(side="left", padx=8)
 
         self._chk_attachments = ttk.Checkbutton(
-            row1, text="Giá»¯ cover/attachments",
+            row1, text="Giữ cover/attachments",
             variable=self.keep_attachments_var,
         )
         self._chk_attachments.pack(side="left", padx=8)
 
         self._chk_data = ttk.Checkbutton(
-            row1, text="Giá»¯ data stream (MKV/TS)",
+            row1, text="Giữ data stream (MKV/TS)",
             variable=self.keep_data_var,
         )
         self._chk_data.pack(side="left", padx=8)
 
         self._chk_rate_cap = ttk.Checkbutton(
-            row2, text="Báº­t tráº§n bitrate (maxrate/bufsize, khuyÃªn dÃ¹ng)",
+            row2, text="Bật trần bitrate (maxrate/bufsize, khuyên dùng)",
             variable=self.rate_cap_var,
         )
         self._chk_rate_cap.pack(side="left", padx=8)
 
         self._chk_reprocess = ttk.Checkbutton(
-            row2, text="Xá»­ lÃ½ láº¡i file Ä‘Ã£ Completed",
+            row2, text="Xử lý lại file đã Completed",
             variable=self.reprocess_completed_var,
         )
         self._chk_reprocess.pack(side="left", padx=8)
 
         self._chk_adaptive_crf = ttk.Checkbutton(
-            row2, text="Adaptive CRF theo nguá»“n (khuyÃªn dÃ¹ng)",
+            row2, text="Adaptive CRF theo nguồn (khuyên dùng)",
             variable=self.adaptive_crf_var,
         )
         self._chk_adaptive_crf.pack(side="left", padx=8)
 
         self._chk_use_gpu = ttk.Checkbutton(
-            row2, text="DÃ¹ng GPU NVIDIA (NVENC)",
+            row2, text="Dùng GPU NVIDIA (NVENC)",
             variable=self.use_gpu_var,
         )
         self._chk_use_gpu.pack(side="left", padx=8)
@@ -2668,41 +2668,41 @@ class VideoConverterUI(_AppBase):
         action_bar.pack(fill="x", padx=12)
 
         self.btn_add = ttk.Button(
-            action_bar, text="âž• ThÃªm File", command=self.add_files,
+            action_bar, text="➕ Thêm File", command=self.add_files,
         )
         self.btn_add.pack(side="left", padx=4)
 
         self.btn_add_folder = ttk.Button(
-            action_bar, text="ðŸ“ ThÃªm ThÆ° Má»¥c", command=self.add_folder,
+            action_bar, text="📁 Thêm Thư Mục", command=self.add_folder,
         )
         self.btn_add_folder.pack(side="left", padx=4)
 
         self.btn_enable_all = ttk.Button(
-            action_bar, text="âœ“ Báº­t háº¿t",
+            action_bar, text="✓ Bật hết",
             command=lambda: self._set_all_enabled(True),
         )
         self.btn_enable_all.pack(side="left", padx=2)
 
         self.btn_disable_all = ttk.Button(
-            action_bar, text="â˜ Táº¯t háº¿t",
+            action_bar, text="☐ Tắt hết",
             command=lambda: self._set_all_enabled(False),
         )
         self.btn_disable_all.pack(side="left", padx=2)
 
         self.btn_clear_completed = ttk.Button(
-            action_bar, text="ðŸ—‘ XoÃ¡ Ä‘Ã£ xá»­ lÃ½", command=self.clear_completed,
+            action_bar, text="🗑 Xoá đã xử lý", command=self.clear_completed,
         )
         self.btn_clear_completed.pack(side="left", padx=2)
 
         self.btn_clear_all = ttk.Button(
             action_bar,
-            text="âœ– XoÃ¡ háº¿t", command=self.clear_all,
+            text="✖ Xoá hết", command=self.clear_all,
         )
         self.btn_clear_all.pack(side="left", padx=2)
 
         self.btn_start = tk.Button(
             action_bar,
-            text="â–¶  Báº®T Äáº¦U CONVERT",
+            text="▶  BẮT ĐẦU CONVERT",
             command=self.start_processing,
             bg=self.colors["success"],
             fg="#ffffff",
@@ -2721,7 +2721,7 @@ class VideoConverterUI(_AppBase):
 
         self.btn_cancel = tk.Button(
             action_bar,
-            text="â–   HUá»¶",
+            text="■  HUỶ",
             command=self.cancel_processing,
             bg=self.colors["danger"],
             fg="#ffffff",
@@ -2743,12 +2743,12 @@ class VideoConverterUI(_AppBase):
         list_header.pack(fill="x", padx=12, pady=(6, 0))
 
         ttk.Label(
-            list_header, text="ðŸ“‹ DANH SÃCH FILE",
+            list_header, text="📋 DANH SÁCH FILE",
             style="Surface.TLabel", font=("Segoe UI", 10, "bold"),
         ).pack(side="left")
 
         self.lbl_list_counter = ttk.Label(
-            list_header, text="ChÆ°a cÃ³ file", style="Muted.TLabel",
+            list_header, text="Chưa có file", style="Muted.TLabel",
         )
         self.lbl_list_counter.pack(side="right", padx=4)
 
@@ -2785,7 +2785,7 @@ class VideoConverterUI(_AppBase):
         output_bar.pack(fill="x", padx=12, pady=4)
 
         ttk.Label(
-            output_bar, text="ðŸ“‚ ThÆ° má»¥c xuáº¥t:", style="Surface.TLabel",
+            output_bar, text="📂 Thư mục xuất:", style="Surface.TLabel",
         ).pack(side="left", padx=4)
 
         self.outdir_var = tk.StringVar(value=str(self.output_dir))
@@ -2798,12 +2798,12 @@ class VideoConverterUI(_AppBase):
         self.entry_outdir.bind("<FocusOut>", self._on_outdir_changed)
 
         self.btn_open_output = ttk.Button(
-            output_bar, text="ðŸ“‚ Má»Ÿ", command=self.open_output_dir,
+            output_bar, text="📂 Mở", command=self.open_output_dir,
         )
         self.btn_open_output.pack(side="right", padx=4)
 
         self.btn_choose_output = ttk.Button(
-            output_bar, text="Chá»n ThÆ° Má»¥c...",
+            output_bar, text="Chọn Thư Mục...",
             command=self.choose_output_dir,
         )
         self.btn_choose_output.pack(side="right", padx=4)
@@ -2846,15 +2846,15 @@ class VideoConverterUI(_AppBase):
     # -------------------------------------------------------------------------
 
     def _on_container_changed(self, _event=None):
-        """User vá»«a Ä‘á»•i container â†’ cáº­p nháº­t láº¡i danh sÃ¡ch codec há»£p lá»‡."""
+        """User vừa đổi container → cập nhật lại danh sách codec hợp lệ."""
         self._refresh_codec_options(initial=False)
 
     def _refresh_codec_options(self, initial: bool = False):
-        """Äá»“ng bá»™ dropdown Video Codec theo Container Ä‘ang chá»n.
+        """Đồng bộ dropdown Video Codec theo Container đang chọn.
 
-        CHá»ˆ can thiá»‡p UI: giÃ¡ trá»‹ truyá»n vÃ o engine váº«n qua get_profile_from_ui
-        vá»›i Ä‘Ãºng label user tháº¥y. Náº¿u codec Ä‘ang chá»n khÃ´ng há»£p lá»‡ cho container
-        má»›i, tá»± reset vá» option Ä‘áº§u tiÃªn vÃ  ghi log cáº£nh bÃ¡o.
+        CHỈ can thiệp UI: giá trị truyền vào engine vẫn qua get_profile_from_ui
+        với đúng label user thấy. Nếu codec đang chọn không hợp lệ cho container
+        mới, tự reset về option đầu tiên và ghi log cảnh báo.
         """
         try:
             container_label = self.controls["cb_target"].get()
@@ -2873,14 +2873,14 @@ class VideoConverterUI(_AppBase):
             codec_cb.configure(values=allowed_codecs)
 
             if current in allowed_codecs:
-                # Giá»¯ nguyÃªn lá»±a chá»n cÅ© náº¿u váº«n há»£p lá»‡.
+                # Giữ nguyên lựa chọn cũ nếu vẫn hợp lệ.
                 codec_cb.set(current)
             else:
                 codec_cb.set(allowed_codecs[0])
                 if not initial:
                     self._log(
-                        f"â„¹ Container {container_label} khÃ´ng há»— trá»£ "
-                        f"codec '{current}' â†’ tá»± chuyá»ƒn sang "
+                        f"ℹ Container {container_label} không hỗ trợ "
+                        f"codec '{current}' → tự chuyển sang "
                         f"'{allowed_codecs[0]}'."
                     )
         except Exception:
@@ -2948,7 +2948,7 @@ class VideoConverterUI(_AppBase):
                 self.after(
                     500,
                     lambda: self._log(
-                        f"ðŸ§¹ ÄÃ£ xoÃ¡ {removed} file táº¡m tá»« session trÆ°á»›c."
+                        f"🧹 Đã xoá {removed} file tạm từ session trước."
                     ),
                 )
         except Exception:
@@ -2997,13 +2997,13 @@ class VideoConverterUI(_AppBase):
         self._set_drag_highlight(False)
 
         if self.is_processing:
-            self._log("âš  Äang convert â€” bá» qua thao tÃ¡c kÃ©o & tháº£.")
+            self._log("⚠ Đang convert — bỏ qua thao tác kéo & thả.")
             return
 
         try:
             raw_paths = self.tk.splitlist(event.data)
         except Exception as exc:
-            self._log(f"âœ— KhÃ´ng Ä‘á»c Ä‘Æ°á»£c dá»¯ liá»‡u kÃ©o & tháº£: {exc}")
+            self._log(f"✗ Không đọc được dữ liệu kéo & thả: {exc}")
             return
 
         if not raw_paths:
@@ -3039,16 +3039,16 @@ class VideoConverterUI(_AppBase):
                 added += 1
 
         if added > 0:
-            self._log(f"âœ“ ÄÃ£ thÃªm {added} file (tá»•ng: {len(self.tasks)}).")
+            self._log(f"✓ Đã thêm {added} file (tổng: {len(self.tasks)}).")
             self._ui(self.render_file_list)
 
         if rejected:
             preview = ", ".join(rejected[:5])
             suffix = "" if len(rejected) <= 5 else f" (+{len(rejected) - 5})"
-            self._log(f"âš  Bá» qua {len(rejected)} file khÃ´ng pháº£i video: {preview}{suffix}")
+            self._log(f"⚠ Bỏ qua {len(rejected)} file không phải video: {preview}{suffix}")
 
         if folders_to_scan:
-            self._start_folder_scan(folders_to_scan, source_label="KÃ©o & tháº£")
+            self._start_folder_scan(folders_to_scan, source_label="Kéo & thả")
 
     # -------------------------------------------------------------------------
     # Output folder
@@ -3063,10 +3063,10 @@ class VideoConverterUI(_AppBase):
             self.outdir_var.set(str(self.output_dir))
 
     def _on_outdir_changed(self, _event=None):
-        """Cho phÃ©p ngÆ°á»i dÃ¹ng gÃµ tay Ä‘Æ°á»ng dáº«n thÆ° má»¥c xuáº¥t.
+        """Cho phép người dùng gõ tay đường dẫn thư mục xuất.
 
-        [F14] Chuáº©n hoÃ¡ path tÆ°Æ¡ng Ä‘á»‘i thÃ nh absolute Ä‘á»ƒ trÃ¡nh ghi nháº§m
-        vÃ o CWD khi user gÃµ path kiá»ƒu `output` hoáº·c `./out`.
+        [F14] Chuẩn hoá path tương đối thành absolute để tránh ghi nhầm
+        vào CWD khi user gõ path kiểu `output` hoặc `./out`.
         """
         raw = self.outdir_var.get().strip()
         if not raw:
@@ -3074,7 +3074,7 @@ class VideoConverterUI(_AppBase):
             return
         try:
             new_path = Path(raw).expanduser()
-            # Chuáº©n hoÃ¡ thÃ nh absolute náº¿u user gÃµ path tÆ°Æ¡ng Ä‘á»‘i.
+            # Chuẩn hoá thành absolute nếu user gõ path tương đối.
             if not new_path.is_absolute():
                 new_path = new_path.resolve()
         except Exception:
@@ -3084,13 +3084,13 @@ class VideoConverterUI(_AppBase):
         self.outdir_var.set(str(self.output_dir))
 
     def open_output_dir(self):
-        """Má»Ÿ thÆ° má»¥c xuáº¥t báº±ng trÃ¬nh quáº£n lÃ½ file cá»§a há»‡ Ä‘iá»u hÃ nh."""
+        """Mở thư mục xuất bằng trình quản lý file của hệ điều hành."""
         path = self.output_dir
         try:
             if not path.exists():
                 messagebox.showwarning(
-                    "ThÃ´ng bÃ¡o",
-                    f"ThÆ° má»¥c chÆ°a tá»“n táº¡i:\n{path}",
+                    "Thông báo",
+                    f"Thư mục chưa tồn tại:\n{path}",
                 )
                 return
             if os.name == "nt":
@@ -3100,21 +3100,21 @@ class VideoConverterUI(_AppBase):
             else:
                 subprocess.Popen(["xdg-open", str(path)])
         except Exception as exc:
-            self._log(f"âœ— KhÃ´ng má»Ÿ Ä‘Æ°á»£c thÆ° má»¥c: {exc}")
+            self._log(f"✗ Không mở được thư mục: {exc}")
 
     # -------------------------------------------------------------------------
-    # [P5] Command line input ("Open with...", kÃ©o vÃ o exe)
+    # [P5] Command line input ("Open with...", kéo vào exe)
     # -------------------------------------------------------------------------
 
     def load_cli_args(self, args: List[str]):
-        """Náº¡p file/thÆ° má»¥c Ä‘Æ°á»£c truyá»n tá»« command line.
+        """Nạp file/thư mục được truyền từ command line.
 
-        KÃ­ch hoáº¡t khi:
-          - Right-click file video â†’ Open with â†’ VideoConvertPro.exe
-          - KÃ©o file/thÆ° má»¥c tháº£ tháº³ng vÃ o file .exe (Windows)
-          - Cháº¡y dÃ²ng lá»‡nh: VideoConvertPro.exe file1.mp4 folder1
+        Kích hoạt khi:
+          - Right-click file video → Open with → VideoConvertPro.exe
+          - Kéo file/thư mục thả thẳng vào file .exe (Windows)
+          - Chạy dòng lệnh: VideoConvertPro.exe file1.mp4 folder1
 
-        CHá»ˆ thÃªm task vÃ o danh sÃ¡ch, khÃ´ng Ä‘á»¥ng logic convert.
+        CHỈ thêm task vào danh sách, không đụng logic convert.
         """
         if not args:
             return
@@ -3126,7 +3126,7 @@ class VideoConverterUI(_AppBase):
         for raw in args:
             if not raw:
                 continue
-            # Bá» qua flags kiá»ƒu --foo (dÃ nh cho tÆ°Æ¡ng lai)
+            # Bỏ qua flags kiểu --foo (dành cho tương lai)
             if raw.startswith("-"):
                 continue
             try:
@@ -3152,14 +3152,14 @@ class VideoConverterUI(_AppBase):
                 added += 1
 
         if added > 0:
-            self._log(f"âœ“ Nháº­n {added} file tá»« command line.")
+            self._log(f"✓ Nhận {added} file từ command line.")
             self.render_file_list()
 
         if rejected:
             preview = ", ".join(rejected[:5])
             suffix = "" if len(rejected) <= 5 else f" (+{len(rejected) - 5})"
             self._log(
-                f"âš  Bá» qua {len(rejected)} file khÃ´ng pháº£i video: "
+                f"⚠ Bỏ qua {len(rejected)} file không phải video: "
                 f"{preview}{suffix}"
             )
 
@@ -3169,7 +3169,7 @@ class VideoConverterUI(_AppBase):
             )
 
     def _update_task_progress(self, task_id: str, progress: float):
-        """Chá»‰ váº½ láº¡i thanh tiáº¿n trÃ¬nh cá»§a 1 task â€” khÃ´ng rebuild cáº£ list."""
+        """Chỉ vẽ lại thanh tiến trình của 1 task — không rebuild cả list."""
         entry = self._progress_widgets.get(task_id)
         if not entry:
             return
@@ -3190,11 +3190,11 @@ class VideoConverterUI(_AppBase):
             pass
 
     # -------------------------------------------------------------------------
-    # [U2] Context menu (chuá»™t pháº£i)
+    # [U2] Context menu (chuột phải)
     # -------------------------------------------------------------------------
 
     def _show_context_menu(self, event, task: VideoConversionTask):
-        """Hiá»ƒn thá»‹ menu chuá»™t pháº£i cho 1 task trong danh sÃ¡ch."""
+        """Hiển thị menu chuột phải cho 1 task trong danh sách."""
         if self.is_processing:
             return
 
@@ -3210,7 +3210,7 @@ class VideoConverterUI(_AppBase):
             font=("Segoe UI", 9),
         )
 
-        toggle_label = "â˜‘ Báº­t file nÃ y" if task.enabled else "â˜ Báº­t file nÃ y"
+        toggle_label = "☑ Bật file này" if task.enabled else "☐ Bật file này"
         menu.add_command(
             label=toggle_label,
             command=lambda tid=task.task_id: self._toggle_task(tid),
@@ -3219,18 +3219,18 @@ class VideoConverterUI(_AppBase):
         menu.add_separator()
 
         menu.add_command(
-            label="ðŸ“‚ Má»Ÿ file nguá»“n",
+            label="📂 Mở file nguồn",
             command=lambda t=task: self._open_source_file(t),
         )
         menu.add_command(
-            label="ðŸ“ Má»Ÿ thÆ° má»¥c chá»©a",
+            label="📁 Mở thư mục chứa",
             command=lambda t=task: self._open_containing_folder(t),
         )
 
         menu.add_separator()
 
         menu.add_command(
-            label="ðŸ—‘ XoÃ¡ khá»i danh sÃ¡ch",
+            label="🗑 Xoá khỏi danh sách",
             command=lambda tid=task.task_id: self.remove_task(tid),
         )
 
@@ -3243,11 +3243,11 @@ class VideoConverterUI(_AppBase):
                 pass
 
     def _open_source_file(self, task: VideoConversionTask):
-        """Má»Ÿ file nguá»“n báº±ng trÃ¬nh phÃ¡t máº·c Ä‘á»‹nh cá»§a OS."""
+        """Mở file nguồn bằng trình phát mặc định của OS."""
         path = task.source_path
         try:
             if not path.exists():
-                self._log(f"âœ— File khÃ´ng tá»“n táº¡i: {path}")
+                self._log(f"✗ File không tồn tại: {path}")
                 return
             if os.name == "nt":
                 os.startfile(str(path))  # type: ignore[attr-defined]
@@ -3256,14 +3256,14 @@ class VideoConverterUI(_AppBase):
             else:
                 subprocess.Popen(["xdg-open", str(path)])
         except Exception as exc:
-            self._log(f"âœ— KhÃ´ng má»Ÿ Ä‘Æ°á»£c file: {exc}")
+            self._log(f"✗ Không mở được file: {exc}")
 
     def _open_containing_folder(self, task: VideoConversionTask):
-        """Má»Ÿ thÆ° má»¥c chá»©a file nguá»“n báº±ng trÃ¬nh quáº£n lÃ½ file cá»§a OS."""
+        """Mở thư mục chứa file nguồn bằng trình quản lý file của OS."""
         folder = task.source_path.parent
         try:
             if not folder.exists():
-                self._log(f"âœ— ThÆ° má»¥c khÃ´ng tá»“n táº¡i: {folder}")
+                self._log(f"✗ Thư mục không tồn tại: {folder}")
                 return
             if os.name == "nt":
                 os.startfile(str(folder))  # type: ignore[attr-defined]
@@ -3272,7 +3272,7 @@ class VideoConverterUI(_AppBase):
             else:
                 subprocess.Popen(["xdg-open", str(folder)])
         except Exception as exc:
-            self._log(f"âœ— KhÃ´ng má»Ÿ Ä‘Æ°á»£c thÆ° má»¥c: {exc}")
+            self._log(f"✗ Không mở được thư mục: {exc}")
 
     # -------------------------------------------------------------------------
     # Folder scan worker
@@ -3292,16 +3292,16 @@ class VideoConverterUI(_AppBase):
             return
 
         if self._scan_in_progress:
-            self._log("âš  Äang quÃ©t thÆ° má»¥c khÃ¡c â€” bá» qua.")
+            self._log("⚠ Đang quét thư mục khác — bỏ qua.")
             return
 
         self._scan_in_progress = True
         self._scan_cancel_event.clear()
 
         if len(roots) == 1:
-            self._log(f"ðŸ“ Äang quÃ©t: {roots[0]}")
+            self._log(f"📁 Đang quét: {roots[0]}")
         else:
-            self._log(f"ðŸ“ Äang quÃ©t {len(roots)} thÆ° má»¥c...")
+            self._log(f"📁 Đang quét {len(roots)} thư mục...")
 
         def worker():
             found: List[Path] = []
@@ -3348,7 +3348,7 @@ class VideoConverterUI(_AppBase):
                 except Exception as exc:
                     self._ui(
                         lambda r=root, e=exc: self._log(
-                            f"âš  KhÃ´ng quÃ©t Ä‘Æ°á»£c {r}: {e}"
+                            f"⚠ Không quét được {r}: {e}"
                         )
                     )
                     continue
@@ -3361,8 +3361,8 @@ class VideoConverterUI(_AppBase):
                 self._scan_in_progress = False
                 label = f" ({source_label})" if source_label else ""
                 self._log(
-                    f"âœ“ QuÃ©t xong{label}: thÃªm {added} file "
-                    f"(tá»•ng: {len(self.tasks)})."
+                    f"✓ Quét xong{label}: thêm {added} file "
+                    f"(tổng: {len(self.tasks)})."
                 )
                 self.render_file_list()
 
@@ -3394,7 +3394,7 @@ class VideoConverterUI(_AppBase):
             if self._add_task_path(Path(file)):
                 added += 1
         if added:
-            self._log(f"âœ“ ÄÃ£ thÃªm {added} file (tá»•ng: {len(self.tasks)}).")
+            self._log(f"✓ Đã thêm {added} file (tổng: {len(self.tasks)}).")
             self._ui(self.render_file_list)
 
     def add_folder(self):
@@ -3403,7 +3403,7 @@ class VideoConverterUI(_AppBase):
         directory = filedialog.askdirectory()
         if not directory:
             return
-        self._start_folder_scan([Path(directory)], source_label="ThÃªm thÆ° má»¥c")
+        self._start_folder_scan([Path(directory)], source_label="Thêm thư mục")
 
     def _add_task_path(self, path: Path) -> bool:
         try:
@@ -3434,7 +3434,7 @@ class VideoConverterUI(_AppBase):
         ]
         removed = before - len(self.tasks)
         if removed:
-            self._log(f"ðŸ—‘ ÄÃ£ xoÃ¡ {removed} file Ä‘Ã£ xá»­ lÃ½.")
+            self._log(f"🗑 Đã xoá {removed} file đã xử lý.")
         self.render_file_list()
 
     def clear_all(self):
@@ -3443,13 +3443,13 @@ class VideoConverterUI(_AppBase):
         if not self.tasks:
             return
         if not messagebox.askokcancel(
-            "XoÃ¡ háº¿t",
-            f"XoÃ¡ toÃ n bá»™ {len(self.tasks)} file khá»i danh sÃ¡ch?",
+            "Xoá hết",
+            f"Xoá toàn bộ {len(self.tasks)} file khỏi danh sách?",
         ):
             return
         self.tasks.clear()
         self.render_file_list()
-        self._log("ðŸ—‘ ÄÃ£ xoÃ¡ toÃ n bá»™ danh sÃ¡ch.")
+        self._log("🗑 Đã xoá toàn bộ danh sách.")
 
     def remove_task(self, task_id: str):
         if self.is_processing:
@@ -3493,13 +3493,13 @@ class VideoConverterUI(_AppBase):
 
         if total == 0:
             self.lbl_list_counter.configure(
-                text="ChÆ°a cÃ³ file", foreground=self.colors["muted"],
+                text="Chưa có file", foreground=self.colors["muted"],
             )
             self._render_empty_state()
             return
 
         self.lbl_list_counter.configure(
-            text=f"â˜‘ {enabled}/{total} file Ä‘Æ°á»£c báº­t",
+            text=f"☑ {enabled}/{total} file được bật",
             foreground=self.colors["accent"] if enabled > 0 else self.colors["muted"],
         )
 
@@ -3511,21 +3511,21 @@ class VideoConverterUI(_AppBase):
         empty.pack(fill="both", expand=True, pady=60)
 
         tk.Label(
-            empty, text="ðŸ“­", bg=self.colors["bg"],
+            empty, text="📭", bg=self.colors["bg"],
             fg=self.colors["muted"], font=("Segoe UI Emoji", 40),
         ).pack()
 
         tk.Label(
-            empty, text="ChÆ°a cÃ³ file nÃ o trong danh sÃ¡ch",
+            empty, text="Chưa có file nào trong danh sách",
             bg=self.colors["bg"], fg=self.colors["text"],
             font=("Segoe UI", 12, "bold"),
         ).pack(pady=(10, 4))
 
         hint = (
-            "KÃ©o & tháº£ file video hoáº·c thÆ° má»¥c vÃ o Ä‘Ã¢y\n"
-            "hoáº·c báº¥m 'ThÃªm File' / 'ThÃªm ThÆ° Má»¥c'"
+            "Kéo & thả file video hoặc thư mục vào đây\n"
+            "hoặc bấm 'Thêm File' / 'Thêm Thư Mục'"
             if HAS_DND and getattr(self, "TkdndVersion", None)
-            else "Báº¥m 'ThÃªm File' / 'ThÃªm ThÆ° Má»¥c' Ä‘á»ƒ báº¯t Ä‘áº§u"
+            else "Bấm 'Thêm File' / 'Thêm Thư Mục' để bắt đầu"
         )
 
         tk.Label(
@@ -3549,10 +3549,10 @@ class VideoConverterUI(_AppBase):
         row1.pack(fill="x", padx=10, pady=(8, 2))
 
         if task.enabled:
-            toggle_char = "â˜‘"
+            toggle_char = "☑"
             toggle_fg = self.colors["success"]
         else:
-            toggle_char = "â˜"
+            toggle_char = "☐"
             toggle_fg = self.colors["muted"]
 
         toggle_btn = tk.Button(
@@ -3583,7 +3583,7 @@ class VideoConverterUI(_AppBase):
         ).pack(side="left", fill="x", expand=True)
 
         remove_btn = tk.Button(
-            row1, text="âœ•",
+            row1, text="✕",
             command=lambda tid=task.task_id: self.remove_task(tid),
             bg=card_bg, fg=self.colors["muted"],
             activebackground=self.colors["danger"],
@@ -3609,7 +3609,7 @@ class VideoConverterUI(_AppBase):
             status_color = self.colors["warning"]
 
         tk.Label(
-            row1, text=f"â— {task.status}", bg=card_bg,
+            row1, text=f"● {task.status}", bg=card_bg,
             fg=status_color, font=("Segoe UI", 9),
         ).pack(side="right", padx=6)
 
@@ -3685,14 +3685,14 @@ class VideoConverterUI(_AppBase):
             plan = task.plan
             parts = []
             if plan.copy_count:
-                parts.append(f"âš¡ {plan.copy_count} copy")
+                parts.append(f"⚡ {plan.copy_count} copy")
             if plan.convert_count:
-                parts.append(f"ðŸ”„ {plan.convert_count} convert")
+                parts.append(f"🔄 {plan.convert_count} convert")
             if plan.drop_count:
-                parts.append(f"ðŸ§¹ {plan.drop_count} drop")
+                parts.append(f"🧹 {plan.drop_count} drop")
 
             tk.Label(
-                row4, text=" Â· ".join(parts) if parts else "â€”",
+                row4, text=" · ".join(parts) if parts else "—",
                 bg=card_bg, fg=self.colors["muted"],
                 font=("Segoe UI", 9), anchor="w",
             ).pack(side="left", fill="x", expand=True)
@@ -3735,17 +3735,17 @@ class VideoConverterUI(_AppBase):
 
         tk.Frame(card, bg=card_bg, height=4).pack(fill="x")
 
-        # [U2] Bind chuá»™t pháº£i cho toÃ n bá»™ card + widget con.
+        # [U2] Bind chuột phải cho toàn bộ card + widget con.
         self._bind_context_menu_recursive(card, task)
 
     def _bind_context_menu_recursive(self, widget, task: VideoConversionTask):
-        """Gáº¯n sá»± kiá»‡n chuá»™t pháº£i cho widget vÃ  toÃ n bá»™ widget con."""
+        """Gắn sự kiện chuột phải cho widget và toàn bộ widget con."""
         try:
             widget.bind(
                 "<Button-3>",
                 lambda e, t=task: self._show_context_menu(e, t),
             )
-            # macOS dÃ¹ng Button-2 cho right-click / control-click.
+            # macOS dùng Button-2 cho right-click / control-click.
             widget.bind(
                 "<Button-2>",
                 lambda e, t=task: self._show_context_menu(e, t),
@@ -3807,17 +3807,17 @@ class VideoConverterUI(_AppBase):
         if self.is_processing:
             return
 
-        # [F14] Äá»“ng bá»™ Entry â†’ self.output_dir TRÆ¯á»šC khi spawn worker.
-        # FocusOut/Return cÃ³ thá»ƒ chÆ°a ká»‹p báº¯n khi user gÃµ tay Ä‘Æ°á»ng dáº«n
-        # rá»“i báº¥m tháº³ng nÃºt Start (nháº¥t lÃ  khi nÃºt cÃ³ takefocus=0).
+        # [F14] Đồng bộ Entry → self.output_dir TRƯỚC khi spawn worker.
+        # FocusOut/Return có thể chưa kịp bắn khi user gõ tay đường dẫn
+        # rồi bấm thẳng nút Start (nhất là khi nút có takefocus=0).
         self._on_outdir_changed()
 
         enabled_tasks = [t for t in self.tasks if t.enabled]
         if not enabled_tasks:
             messagebox.showinfo(
-                "ThÃ´ng bÃ¡o",
-                "KhÃ´ng cÃ³ file nÃ o Ä‘Æ°á»£c báº­t Ä‘á»ƒ convert.\n\n"
-                "HÃ£y tick chá»n file báº¡n muá»‘n xá»­ lÃ½.",
+                "Thông báo",
+                "Không có file nào được bật để convert.\n\n"
+                "Hãy tick chọn file bạn muốn xử lý.",
             )
             return
 
@@ -3832,8 +3832,8 @@ class VideoConverterUI(_AppBase):
         self.cancel_event.clear()
         self._reserved_names.clear()
 
-        # [N1] Ghi nhá»› sá»‘ task cá»§a batch Ä‘á»ƒ popup tá»•ng káº¿t chá»‰ hiá»‡n
-        # khi thá»±c sá»± cÃ³ task Ä‘Æ°á»£c xá»­ lÃ½.
+        # [N1] Ghi nhớ số task của batch để popup tổng kết chỉ hiện
+        # khi thực sự có task được xử lý.
         self._batch_task_count = len(enabled_tasks)
 
         self._set_ui_locked(True)
@@ -3844,8 +3844,8 @@ class VideoConverterUI(_AppBase):
 
         self.render_file_list()
 
-        # Log Ä‘á»ƒ dá»… debug â€” xÃ¡c nháº­n Ä‘Ãºng thÆ° má»¥c Ä‘ang dÃ¹ng.
-        self._log(f"ðŸ“‚ ThÆ° má»¥c xuáº¥t: {self.output_dir}")
+        # Log để dễ debug — xác nhận đúng thư mục đang dùng.
+        self._log(f"📂 Thư mục xuất: {self.output_dir}")
 
         worker = threading.Thread(
             target=self._process_worker,
@@ -3857,13 +3857,13 @@ class VideoConverterUI(_AppBase):
     def cancel_processing(self):
         if self.is_processing:
             self.cancel_event.set()
-            self._log("âš  ÄÃ£ gá»­i yÃªu cáº§u huá»·.")
+            self._log("⚠ Đã gửi yêu cầu huỷ.")
         if self._scan_in_progress:
             self._scan_cancel_event.set()
-            self._log("âš  ÄÃ£ gá»­i yÃªu cáº§u huá»· quÃ©t thÆ° má»¥c.")
+            self._log("⚠ Đã gửi yêu cầu huỷ quét thư mục.")
 
     # -------------------------------------------------------------------------
-    # Worker â€” Ä‘iá»u phá»‘i batch
+    # Worker — điều phối batch
     # -------------------------------------------------------------------------
 
     def _process_worker(
@@ -3875,7 +3875,7 @@ class VideoConverterUI(_AppBase):
             try:
                 self.output_dir.mkdir(parents=True, exist_ok=True)
             except Exception as exc:
-                self._log(f"âœ— KhÃ´ng thá»ƒ táº¡o output folder: {exc}")
+                self._log(f"✗ Không thể tạo output folder: {exc}")
                 return
 
             total = len(tasks_snapshot)
@@ -3889,7 +3889,7 @@ class VideoConverterUI(_AppBase):
 
                 if task.status == "Completed" and not profile.reprocess_completed:
                     self._log(
-                        f"[{idx}/{total}] Bá» qua (Ä‘Ã£ Completed): "
+                        f"[{idx}/{total}] Bỏ qua (đã Completed): "
                         f"{task.source_path.name}"
                     )
                     progress = idx / max(total, 1) * 100
@@ -3904,7 +3904,7 @@ class VideoConverterUI(_AppBase):
                     task.status = "Failed"
                     task.error_message = f"Worker exception: {exc}"
                     self._log(
-                        f"âœ— Worker exception task "
+                        f"✗ Worker exception task "
                         f"{task.source_path.name}: {exc}"
                     )
                     self._ui(self.render_file_list)
@@ -3915,7 +3915,7 @@ class VideoConverterUI(_AppBase):
                 )
                 self._ui(self.render_file_list)
         except Exception as exc:
-            self._log(f"âœ— Worker fatal error: {exc}")
+            self._log(f"✗ Worker fatal error: {exc}")
         finally:
             self._processing_finished()
 
@@ -3936,20 +3936,20 @@ class VideoConverterUI(_AppBase):
         task.used_tier = 0
         self._ui(self.render_file_list)
 
-        self._log(f"[{idx}/{total}] Báº¯t Ä‘áº§u: {task.source_path.name}")
+        self._log(f"[{idx}/{total}] Bắt đầu: {task.source_path.name}")
 
         success = self._process_one_task(task, profile)
 
         if success:
             task.status = "Completed"
-            self._log(f"âœ“ HoÃ n táº¥t: {task.source_path.name}")
+            self._log(f"✓ Hoàn tất: {task.source_path.name}")
         else:
             if self.cancel_event.is_set():
                 task.status = "Cancelled"
             else:
                 task.status = "Failed"
             self._log(
-                f"âœ— {task.status}: {task.source_path.name} "
+                f"✗ {task.status}: {task.source_path.name} "
                 f"- {task.error_message}"
             )
 
@@ -3959,19 +3959,19 @@ class VideoConverterUI(_AppBase):
         self._ui(lambda: self.btn_start.config(state="normal"))
         self._ui(lambda: self.btn_cancel.config(state="disabled"))
         self._ui(self.render_file_list)
-        self._log("ðŸ HÃ ng Ä‘á»£i Ä‘Ã£ káº¿t thÃºc.")
-        # [N1] Popup tá»•ng káº¿t khi batch xá»­ lÃ½ xong.
+        self._log("🏁 Hàng đợi đã kết thúc.")
+        # [N1] Popup tổng kết khi batch xử lý xong.
         self._ui(self._show_completion_popup)
 
     # -------------------------------------------------------------------------
-    # [N1] Popup tá»•ng káº¿t khi xá»­ lÃ½ xong
+    # [N1] Popup tổng kết khi xử lý xong
     # -------------------------------------------------------------------------
 
     def _show_completion_popup(self):
-        """Popup tá»•ng káº¿t batch khi worker káº¿t thÃºc.
+        """Popup tổng kết batch khi worker kết thúc.
 
-        Chá»‰ hiá»‡n khi batch cÃ³ task thá»±c sá»± Ä‘Æ°á»£c xá»­ lÃ½ (khÃ´ng hiá»‡n khi
-        start_processing bá»‹ cháº·n sá»›m do khÃ´ng cÃ³ file / thiáº¿u FFmpeg).
+        Chỉ hiện khi batch có task thực sự được xử lý (không hiện khi
+        start_processing bị chặn sớm do không có file / thiếu FFmpeg).
         """
         if self._batch_task_count <= 0:
             return
@@ -3983,34 +3983,34 @@ class VideoConverterUI(_AppBase):
         completed = sum(1 for t in self.tasks if t.status == "Completed")
         failed = sum(1 for t in self.tasks if t.status == "Failed")
         cancelled = sum(1 for t in self.tasks if t.status == "Cancelled")
-        # CÃ¡c task cÃ²n status Pending/Processing/Probing coi nhÆ° chÆ°a xá»­ lÃ½
-        # (thÆ°á»ng xáº£y ra khi user huá»· giá»¯a batch).
+        # Các task còn status Pending/Processing/Probing coi như chưa xử lý
+        # (thường xảy ra khi user huỷ giữa batch).
         pending = total - completed - failed - cancelled
 
         lines: List[str] = []
-        lines.append(f"Tá»•ng sá»‘ file trong danh sÃ¡ch: {total}")
-        lines.append(f"âœ… ThÃ nh cÃ´ng: {completed}")
+        lines.append(f"Tổng số file trong danh sách: {total}")
+        lines.append(f"✅ Thành công: {completed}")
         if failed:
-            lines.append(f"âŒ Tháº¥t báº¡i: {failed}")
+            lines.append(f"❌ Thất bại: {failed}")
         if cancelled:
-            lines.append(f"ðŸš« ÄÃ£ huá»·: {cancelled}")
+            lines.append(f"🚫 Đã huỷ: {cancelled}")
         if pending:
-            lines.append(f"â¸ ChÆ°a xá»­ lÃ½: {pending}")
+            lines.append(f"⏸ Chưa xử lý: {pending}")
         lines.append("")
-        lines.append(f"ðŸ“‚ ThÆ° má»¥c xuáº¥t:\n{self.output_dir}")
+        lines.append(f"📂 Thư mục xuất:\n{self.output_dir}")
 
         body = "\n".join(lines)
 
         try:
             if failed == 0 and cancelled == 0 and pending == 0 and completed > 0:
-                messagebox.showinfo("âœ… HoÃ n táº¥t", body)
+                messagebox.showinfo("✅ Hoàn tất", body)
             elif completed > 0 or failed > 0 or cancelled > 0:
-                messagebox.showwarning("âš  Xá»­ lÃ½ xong", body)
-            # Náº¿u khÃ´ng cÃ³ gÃ¬ xá»­ lÃ½ xong thÃ¬ im láº·ng.
+                messagebox.showwarning("⚠ Xử lý xong", body)
+            # Nếu không có gì xử lý xong thì im lặng.
         except Exception:
             pass
 
-        # Reset counter sau khi Ä‘Ã£ hiá»ƒn thá»‹ popup.
+        # Reset counter sau khi đã hiển thị popup.
         self._batch_task_count = 0
 
     # -------------------------------------------------------------------------
@@ -4076,14 +4076,14 @@ class VideoConverterUI(_AppBase):
 
     def _compute_badge(self, plan: ConversionPlan, emergency: bool) -> str:
         if emergency:
-            return "ðŸ”¥ EMERGENCY"
+            return "🔥 EMERGENCY"
         if plan.is_pure_remux:
-            return "âš¡ PURE REMUX"
+            return "⚡ PURE REMUX"
         if plan.convert_count > 0 and plan.drop_count > 0:
-            return "ðŸ§¹ SMART"
+            return "🧹 SMART"
         if plan.convert_count > 0:
-            return "ðŸ”„ SMART"
-        return "ðŸ§¹ FILTERED"
+            return "🔄 SMART"
+        return "🧹 FILTERED"
 
     def _apply_attempt_mutation(
         self,
@@ -4097,14 +4097,14 @@ class VideoConverterUI(_AppBase):
             if primary and overrides.get(primary.index) != "convert":
                 overrides[primary.index] = "convert"
                 self._log(
-                    f"  â†’ KhÃ´ng rÃµ stream lá»—i; "
-                    f"video chÃ­nh #{primary.index} â†’ CONVERT."
+                    f"  → Không rõ stream lỗi; "
+                    f"video chính #{primary.index} → CONVERT."
                 )
         elif attempt == 4:
             for s in probe.streams:
                 if s.codec_type == "audio" and overrides.get(s.index) != "convert":
                     overrides[s.index] = "convert"
-                    self._log(f"  â†’ Audio #{s.index} nÃ¢ng lÃªn CONVERT.")
+                    self._log(f"  → Audio #{s.index} nâng lên CONVERT.")
                     break
         elif attempt == 5:
             changed = False
@@ -4113,7 +4113,7 @@ class VideoConverterUI(_AppBase):
                     overrides[s.index] = "convert"
                     changed = True
             if changed:
-                self._log("  â†’ Ã‰p toÃ n bá»™ audio CONVERT.")
+                self._log("  → Ép toàn bộ audio CONVERT.")
         elif attempt == 6:
             changed = False
             for s in probe.streams:
@@ -4121,7 +4121,7 @@ class VideoConverterUI(_AppBase):
                     overrides[s.index] = "drop"
                     changed = True
             if changed:
-                self._log("  â†’ Loáº¡i subtitle Ä‘á»ƒ tÄƒng kháº£ nÄƒng hoÃ n táº¥t.")
+                self._log("  → Loại subtitle để tăng khả năng hoàn tất.")
 
     def _escalate_muxer_refused(
         self,
@@ -4146,9 +4146,9 @@ class VideoConverterUI(_AppBase):
             )
             codec_name = stream.codec_name if stream else "?"
             self._log(
-                f"  â†’ Muxer tá»« chá»‘i (khÃ´ng rÃµ stream cá»¥ thá»ƒ): "
+                f"  → Muxer từ chối (không rõ stream cụ thể): "
                 f"#{action.stream_index} {action.codec_type}/{codec_name} "
-                f"COPY â†’ CONVERT"
+                f"COPY → CONVERT"
             )
         return changed
 
@@ -4168,10 +4168,10 @@ class VideoConverterUI(_AppBase):
                         continue
                     if s.codec_name not in allowed:
                         self._log(
-                            f"  âš  Force Copy video #{s.index}: "
-                            f"codec {s.codec_name} khÃ´ng thuá»™c allowlist "
-                            f"{target} â€” cÃ³ thá»ƒ fail; sáº½ tá»± chuyá»ƒn convert "
-                            f"khi cÃ´ng cá»¥ tá»« chá»‘i."
+                            f"  ⚠ Force Copy video #{s.index}: "
+                            f"codec {s.codec_name} không thuộc allowlist "
+                            f"{target} — có thể fail; sẽ tự chuyển convert "
+                            f"khi công cụ từ chối."
                         )
 
         if profile.audio_mode == "copy":
@@ -4182,10 +4182,10 @@ class VideoConverterUI(_AppBase):
                         continue
                     if s.codec_name not in allowed:
                         self._log(
-                            f"  âš  Force Copy audio #{s.index}: "
-                            f"codec {s.codec_name} khÃ´ng thuá»™c allowlist "
-                            f"{target} â€” cÃ³ thá»ƒ fail; sáº½ tá»± chuyá»ƒn convert "
-                            f"khi cÃ´ng cá»¥ tá»« chá»‘i."
+                            f"  ⚠ Force Copy audio #{s.index}: "
+                            f"codec {s.codec_name} không thuộc allowlist "
+                            f"{target} — có thể fail; sẽ tự chuyển convert "
+                            f"khi công cụ từ chối."
                         )
 
     # -------------------------------------------------------------------------
@@ -4204,19 +4204,19 @@ class VideoConverterUI(_AppBase):
 
         if not probe:
             task.error_message = (
-                "Probe tháº¥t báº¡i. " + " ".join(report.details[-3:])
+                "Probe thất bại. " + " ".join(report.details[-3:])
             )
             return False
 
         primary = self.engine.choose_primary_video(probe.streams)
         if not primary:
-            task.error_message = "File khÃ´ng cÃ³ video chÃ­nh."
+            task.error_message = "File không có video chính."
             return False
 
         self._log(
-            f"  Probe: {probe.format_name or '?'} Â· "
-            f"{format_size(probe.size)} Â· "
-            f"{format_duration(probe.duration)} Â· "
+            f"  Probe: {probe.format_name or '?'} · "
+            f"{format_size(probe.size)} · "
+            f"{format_duration(probe.duration)} · "
             f"{len(probe.streams)} streams"
         )
 
@@ -4227,7 +4227,7 @@ class VideoConverterUI(_AppBase):
             if junk:
                 desc = f"#{stream.index} {stream.codec_type}/{stream.codec_name}"
                 task.dropped_streams.append(desc)
-                self._log(f"  ðŸ§¹ DROP stream {desc}: {reason}")
+                self._log(f"  🧹 DROP stream {desc}: {reason}")
 
         compat = CONTAINER_COMPAT.get(
             profile.target_container.lower(),
@@ -4258,7 +4258,7 @@ class VideoConverterUI(_AppBase):
         return success
 
     # -------------------------------------------------------------------------
-    # Fallback ladder â€” 7 attempt
+    # Fallback ladder — 7 attempt
     # -------------------------------------------------------------------------
 
     def _execute_task_attempts(
@@ -4277,7 +4277,7 @@ class VideoConverterUI(_AppBase):
         def progress_cb(p):
             task.progress = p
             now = time.time()
-            # Chá»‰ váº½ láº¡i thanh % â€” KHÃ”NG re-render cáº£ file list.
+            # Chỉ vẽ lại thanh % — KHÔNG re-render cả file list.
             if now - last_render_ts["t"] >= 0.12:
                 last_render_ts["t"] = now
                 self._ui(
@@ -4287,7 +4287,7 @@ class VideoConverterUI(_AppBase):
 
         for attempt in range(1, self.MAX_ATTEMPTS + 1):
             if self.cancel_event.is_set():
-                task.error_message = "ÄÃ£ huá»·."
+                task.error_message = "Đã huỷ."
                 return False
 
             self._cleanup_temp(temp_output)
@@ -4300,7 +4300,7 @@ class VideoConverterUI(_AppBase):
             task.plan = plan
             task.badge_type = self._compute_badge(plan, emergency)
             task.converted_streams = [
-                f"#{a.stream_index} {a.codec_type} â†’ {a.target_codec or '?'} ({a.reason})"
+                f"#{a.stream_index} {a.codec_type} → {a.target_codec or '?'} ({a.reason})"
                 for a in plan.actions
                 if a.action == "convert"
             ]
@@ -4321,7 +4321,7 @@ class VideoConverterUI(_AppBase):
             if not emergency and plan_sig == last_plan_sig:
                 self._log(
                     f"  Attempt {attempt}/{self.MAX_ATTEMPTS}: "
-                    f"plan khÃ´ng Ä‘á»•i â†’ bá» qua."
+                    f"plan không đổi → bỏ qua."
                 )
                 self._apply_attempt_mutation(attempt, overrides, probe, task)
                 continue
@@ -4329,8 +4329,8 @@ class VideoConverterUI(_AppBase):
 
             self._log(
                 f"  Attempt {attempt}/{self.MAX_ATTEMPTS} "
-                f"Â· tier {task.used_tier} "
-                f"Â· {plan.copy_count} copy / "
+                f"· tier {task.used_tier} "
+                f"· {plan.copy_count} copy / "
                 f"{plan.convert_count} convert / "
                 f"{plan.drop_count} drop"
             )
@@ -4342,7 +4342,7 @@ class VideoConverterUI(_AppBase):
                 if not cmd:
                     last_error = "Emergency command build failed."
                     break
-                self._log("  â†’ Emergency: full re-encode + transcode audio.")
+                self._log("  → Emergency: full re-encode + transcode audio.")
             else:
                 cmd = self.engine.build_ffmpeg_command(
                     task.source_path, plan, temp_output,
@@ -4357,7 +4357,7 @@ class VideoConverterUI(_AppBase):
             )
 
             if rc == -1 and self.cancel_event.is_set():
-                task.error_message = "ÄÃ£ huá»·."
+                task.error_message = "Đã huỷ."
                 return False
 
             if rc == 0:
@@ -4369,15 +4369,15 @@ class VideoConverterUI(_AppBase):
                     try:
                         shutil.move(str(temp_output), str(final_output))
                     except Exception as exc:
-                        last_error = f"KhÃ´ng thá»ƒ move output: {exc}"
+                        last_error = f"Không thể move output: {exc}"
                         break
 
                     task.progress = 1.0
-                    self._log(f"  âœ“ {reason} â†’ {final_output.name}")
+                    self._log(f"  ✓ {reason} → {final_output.name}")
                     return True
 
-                last_error = f"Verify tháº¥t báº¡i: {reason}"
-                self._log(f"  âš  FFmpeg OK nhÆ°ng verify fail: {reason}")
+                last_error = f"Verify thất bại: {reason}"
+                self._log(f"  ⚠ FFmpeg OK nhưng verify fail: {reason}")
             else:
                 last_error = (
                     stderr.strip()[-2500:]
@@ -4390,7 +4390,7 @@ class VideoConverterUI(_AppBase):
             muxer_refused = self.engine.stderr_indicates_muxer_refusal(stderr)
 
             if timestamp_problem:
-                self._log("  âš  PhÃ¡t hiá»‡n lá»—i timestamp/DTS/PTS.")
+                self._log("  ⚠ Phát hiện lỗi timestamp/DTS/PTS.")
 
             if bad_stream is not None:
                 stream = next(
@@ -4407,10 +4407,10 @@ class VideoConverterUI(_AppBase):
                     if current == "copy":
                         if muxer_refused is None and attempt < 2:
                             self._log(
-                                f"  â†’ Stream #{bad_stream} "
+                                f"  → Stream #{bad_stream} "
                                 f"{stream.codec_type}/{stream.codec_name}: "
-                                f"copy lá»—i decode; thá»­ láº¡i vá»›i tolerance "
-                                f"cao hÆ¡n trÆ°á»›c khi convert."
+                                f"copy lỗi decode; thử lại với tolerance "
+                                f"cao hơn trước khi convert."
                             )
                             continue
 
@@ -4420,15 +4420,15 @@ class VideoConverterUI(_AppBase):
                             task.converted_streams.append(desc)
                         if muxer_refused is not None:
                             self._log(
-                                f"  â†’ Stream #{bad_stream} "
+                                f"  → Stream #{bad_stream} "
                                 f"{stream.codec_type}/{stream.codec_name}: "
-                                f"muxer/container tá»« chá»‘i copy â†’ CONVERT"
+                                f"muxer/container từ chối copy → CONVERT"
                             )
                         else:
                             self._log(
-                                f"  â†’ Stream #{bad_stream} "
+                                f"  → Stream #{bad_stream} "
                                 f"{stream.codec_type}/{stream.codec_name}: "
-                                f"copy fail á»Ÿ tolerance cao nháº¥t â†’ CONVERT"
+                                f"copy fail ở tolerance cao nhất → CONVERT"
                             )
                         continue
 
@@ -4436,15 +4436,15 @@ class VideoConverterUI(_AppBase):
                         primary = self.engine.choose_primary_video(probe.streams)
                         if primary and stream.index == primary.index:
                             self._log(
-                                f"  â†’ Video chÃ­nh #{bad_stream} "
-                                f"khÃ´ng Ä‘Æ°á»£c DROP; chuyá»ƒn emergency."
+                                f"  → Video chính #{bad_stream} "
+                                f"không được DROP; chuyển emergency."
                             )
                             continue
 
                         if stream.codec_type in {"subtitle", "data", "unknown"}:
                             overrides[bad_stream] = "drop"
                             self._log(
-                                f"  â†’ Stream #{bad_stream} CONVERT fail â†’ DROP"
+                                f"  → Stream #{bad_stream} CONVERT fail → DROP"
                             )
                             continue
 
@@ -4454,8 +4454,8 @@ class VideoConverterUI(_AppBase):
                             )
                             if primary_audio and stream.index == primary_audio.index:
                                 self._log(
-                                    f"  â†’ Audio chÃ­nh #{bad_stream} "
-                                    f"khÃ´ng Ä‘Æ°á»£c DROP; giá»¯ CONVERT."
+                                    f"  → Audio chính #{bad_stream} "
+                                    f"không được DROP; giữ CONVERT."
                                 )
                                 continue
 
@@ -4466,12 +4466,12 @@ class VideoConverterUI(_AppBase):
                             if len(audio_streams) > 1:
                                 overrides[bad_stream] = "drop"
                                 self._log(
-                                    f"  â†’ Audio phá»¥ #{bad_stream} "
-                                    f"CONVERT fail â†’ DROP"
+                                    f"  → Audio phụ #{bad_stream} "
+                                    f"CONVERT fail → DROP"
                                 )
                                 continue
                             self._log(
-                                f"  â†’ Audio chÃ­nh #{bad_stream} giá»¯, tiáº¿p tá»¥c."
+                                f"  → Audio chính #{bad_stream} giữ, tiếp tục."
                             )
                             continue
 
@@ -4486,7 +4486,7 @@ class VideoConverterUI(_AppBase):
                 self._apply_attempt_mutation(attempt, overrides, probe, task)
 
         task.error_message = (
-            last_error or "Xá»­ lÃ½ tháº¥t báº¡i sau toÃ n bá»™ fallback."
+            last_error or "Xử lý thất bại sau toàn bộ fallback."
         )[:2500]
         return False
 
@@ -4505,9 +4505,9 @@ class VideoConverterUI(_AppBase):
 def main():
     app = VideoConverterUI()
 
-    # [P5] Nháº­n file tá»« "Open with..." / kÃ©o tháº£ vÃ o exe / command line.
-    # DÃ¹ng after() Ä‘á»ƒ Ä‘áº£m báº£o UI Ä‘Ã£ render xong trÆ°á»›c khi add task,
-    # trÃ¡nh race vá»›i _drain_ui_queue khá»Ÿi Ä‘á»™ng trong __init__.
+    # [P5] Nhận file từ "Open with..." / kéo thả vào exe / command line.
+    # Dùng after() để đảm bảo UI đã render xong trước khi add task,
+    # tránh race với _drain_ui_queue khởi động trong __init__.
     cli_args = sys.argv[1:]
     if cli_args:
         app.after(50, lambda: app.load_cli_args(cli_args))
